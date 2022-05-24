@@ -1,0 +1,25 @@
+{
+  "dependencies": {
+    "@adiwajshing/baileys": "github:adiwajshing/baileys",
+    "@hapi/boom": "^10.0.0",
+    "node-fetch": "^3.2.4",
+    "qrcode-terminal": "^0.12.0",
+    "ts-node-dev": "^1.1.8"
+  },
+  "name": "bottest",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./build/start.js",
+    "dev": "ts-node-dev ./src/start.ts",
+    "build": "tsc",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "typescript": "^4.6.4"
+  }
+}
