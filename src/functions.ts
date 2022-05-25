@@ -289,9 +289,9 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
 export const extractCommandAndArgs = (message: string) => {
   if (!message) return { command: "", args: "" };
 
-  const [command, ...tempArgs] = message.trim().split(" ");
+  const [command, ...args] = message.trim().split(" ");
 
-  const args = tempArgs.reduce((acc, arg) => acc + " " + arg, "").trim();
+  //const args = tempArgs.reduce((acc, arg) => acc + " " + arg, "").trim();
 
   return { command, args };
 };

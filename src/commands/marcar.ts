@@ -4,22 +4,24 @@ import { IBotData } from "../interfaces/IBotData";
 import { isAdmin } from "../functions";
 
 export default async (botData: IBotData) => {
-  const { reply, remoteJid, socket, userJid } = botData;
+  const { reply, args, remoteJid, socket, userJid, webMessage } = botData;
 
   if (!(await isAdmin(botData)) && !(general.owners.includes(userJid))) {
-    return reply("Somente admins!");
+    return reply("Somente admins podem utilizar esse comando!");
   }
 
-  const { participants } = await socket.groupMetadata(remoteJid);
-  const jids = participants.map(({ id }) => id);
+  if(args.length <= 0) {
+    return reply("Defina uma menssagem!");
+  }
 
-  const message = jids.reduce(
-    (acc: string, curr: string) => acc + `- @${curr.split("@")[0]}\n`,
-    ""
-  );
+  let member = await socket.groupMetadata(remoteJid)?.group['participants']
+  let jids = [];
 
-  await socket.sendMessage(remoteJid, {
-    text: message,
-    mentions: jids,
+  member.map(async contatct => { jids.push(contatct.id.replace('c.us', 's.whatsapp.net')) })
+
+  await socket.sendMessage(remoteJid, { text: args.join(" ") }, 
+  {
+    contextInfo: {mentionedJid: jids},
+    quoted: webMessage
   });
-};
+}
