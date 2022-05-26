@@ -20,8 +20,5 @@ export default async (botData: IBotData) => {
 
   members.map(async contatct => { jids.push(contatct.id.replace('c.us', 's.whatsapp.net')) })
 
-  await socket.sendMessage(remoteJid, { text: args.join(" ") }, 
-  {
-    contextInfo: {mentionedJid: jids}
-  });
+  await socket.sendMessage(remoteJid, { text: args.join(" "), contextInfo: {mentionedJid: jids}, quoted: webMessage });
 }

@@ -56,7 +56,7 @@ export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: pro
         ? pathOrBuffer
         : fs.readFileSync(pathOrBuffer);
 
-    return await socket.sendMessage(remoteJid, { sticker }, options);
+    return await socket.sendMessage(remoteJid, { sticker}, options);
   };
 
   const sendAudio = async (

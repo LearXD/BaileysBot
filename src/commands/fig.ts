@@ -12,8 +12,8 @@ export default async ({
   isVideo,
   webMessage,
   reply,
-  sendSticker,
-}: IBotData) => {
+  sendSticker }: IBotData) => {
+
   if (!isImage && !isVideo) {
     return await reply(`⚠ Por favor, envie uma imagem ou um vídeo!`);
   }

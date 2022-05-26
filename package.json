@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
+    "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@hapi/boom": "^10.0.0",
     "fluent-ffmpeg": "^2.1.2",
     "got": "^12.1.0",
@@ -25,6 +26,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20",
     "typescript": "^4.6.4"
   }
 }
