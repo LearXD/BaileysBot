@@ -14,14 +14,14 @@ export default async (botData: IBotData) => {
     return reply("Defina uma menssagem!");
   }
 
-  let member = await socket.groupMetadata(remoteJid)?.group['participants']
+  let groupData = await socket.groupMetadata(remoteJid);
+  let members = groupData['participants'];
   let jids = [];
 
-  member.map(async contatct => { jids.push(contatct.id.replace('c.us', 's.whatsapp.net')) })
+  members.map(async contatct => { jids.push(contatct.id.replace('c.us', 's.whatsapp.net')) })
 
   await socket.sendMessage(remoteJid, { text: args.join(" ") }, 
   {
-    contextInfo: {mentionedJid: jids},
-    quoted: webMessage
+    contextInfo: {mentionedJid: jids}
   });
 }

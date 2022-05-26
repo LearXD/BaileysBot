@@ -4,9 +4,9 @@ import pm from 'path';
 import { writeFile } from "fs/promises";
 import { IBotData } from "./interfaces/IBotData";
 import { general } from "./configurations/general";
+import fetch from "node-fetch";
 
-export const getBotData = (socket: any, webMessage: proto.IWebMessageInfo ): IBotData => {
-    const { remoteJid } = webMessage.key;
+export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: proto.IWebMessageInfo) => {
 
   const sendText = async (text: string) => {
     return socket.sendMessage(remoteJid, {
@@ -34,9 +34,9 @@ export const getBotData = (socket: any, webMessage: proto.IWebMessageInfo ): IBo
 
     const params = caption
       ? {
-          image,
-          "caption": caption,
-        }
+        image,
+        "caption": caption,
+      }
       : { image };
 
     return await socket.sendMessage(remoteJid, params, options);
@@ -102,6 +102,7 @@ export const getBotData = (socket: any, webMessage: proto.IWebMessageInfo ): IBo
     );
   };
 
+
   const reply = async (text: string) => {
     return socket.sendMessage(
       webMessage.key.remoteJid,
@@ -110,18 +111,61 @@ export const getBotData = (socket: any, webMessage: proto.IWebMessageInfo ): IBo
     );
   };
 
-  const {
-    userJid,
-    messageText,
-    isImage,
-    isVideo,
-    isSticker,
-    isAudio,
-    isDocument,
-    replyJid,
-  } = extractDataFromWebMessage(webMessage);
+  return {
+    sendText,
+    sendImage,
+    sendSticker,
+    sendAudio,
+    reply
+  }
+}
 
-  const { command, args } = extractCommandAndArgs(messageText);
+export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBotData => {
+  const { remoteJid } = webMessage.key;
+
+  const { 
+    sendText,
+    sendImage,
+    sendSticker,
+    sendAudio,
+    reply 
+  } = getBotFunctions(socket, remoteJid, webMessage);
+
+  if (webMessage) {
+    const {
+      userJid,
+      messageText,
+      isImage,
+      isVideo,
+      isSticker,
+      isAudio,
+      isDocument,
+      replyJid,
+    } = extractDataFromWebMessage(webMessage);
+
+    const { command, args } = extractCommandAndArgs(messageText);
+
+    return {
+      sendText,
+      sendImage,
+      sendSticker,
+      sendAudio,
+      reply,
+      remoteJid,
+      userJid,
+      replyJid,
+      socket,
+      webMessage,
+      command,
+      args,
+      isImage,
+      isVideo,
+      isSticker,
+      isAudio,
+      isDocument
+    };
+
+  };
 
   return {
     sendText,
@@ -129,18 +173,7 @@ export const getBotData = (socket: any, webMessage: proto.IWebMessageInfo ): IBo
     sendSticker,
     sendAudio,
     reply,
-    remoteJid,
-    userJid,
-    replyJid,
-    socket,
-    webMessage,
-    command,
-    args,
-    isImage,
-    isVideo,
-    isSticker,
-    isAudio,
-    isDocument,
+    remoteJid
   };
 };
 
@@ -460,7 +493,7 @@ export const onlyNumbers = (text: string) => {
   return text.replace(/[^0-9]/g, "");
 };
 
-/*
+
 export async function getBuffer(url: string) {
   const res = await fetch(url, {
     headers: { "User-Agent": "okhttp/4.5.0" },
@@ -473,4 +506,3 @@ export async function getBuffer(url: string) {
 
   return { type: res.headers.get("content-type"), result: "Error" };
 }
-*/

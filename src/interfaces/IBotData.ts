@@ -17,16 +17,16 @@ export interface IBotData {
     ptt?: boolean
   ) => Promise<proto.WebMessageInfo>;
   reply: (text: string) => Promise<proto.WebMessageInfo>;
-  socket: any;
-  remoteJid: string;
-  replyJid: string;
-  userJid: string;
-  webMessage: proto.IWebMessageInfo;
-  isImage: boolean;
-  isVideo: boolean;
-  isSticker: boolean;
-  isAudio: boolean;
-  isDocument: boolean;
-  command: string;
-  args: any;
+  socket?: any;
+  remoteJid?: string;
+  replyJid?: string;
+  userJid?: string;
+  webMessage?: proto.IWebMessageInfo;
+  isImage?: boolean;
+  isVideo?: boolean;
+  isSticker?: boolean;
+  isAudio?: boolean;
+  isDocument?: boolean;
+  command?: string;
+  args?: any;
 }
