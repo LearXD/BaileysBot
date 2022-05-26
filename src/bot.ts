@@ -3,6 +3,8 @@ import { general } from "./configurations/general";
 import { connect } from "./connection";
 import {
   getBotData,
+  getBotFunctions,
+  getBuffer,
   getCommand,
   isCommand,
   readJSON,
@@ -10,6 +12,8 @@ import {
 
 export default async () => {
   const socket = await connect();
+
+  await socket.sendMessage("120363023474297101@g.us", { text: "TESTEEEEE", }, {  });
 
   socket.ev.on("messages.upsert", async (message) => {
     const [webMessage] = message.messages;
@@ -30,15 +34,18 @@ export default async () => {
 
   socket.ev.on("group-participants.update", async (data) => {
     const { id, action, participants } = data;
+    const { sendImage } = getBotFunctions(socket, id);
 
-    if (action !== "add" || !participants.length) return;
+    const image = await socket.profilePictureUrl(participants[0], "image");
+    const buffer = await getBuffer(image);
 
-    const [participant] = participants;
-
-    try {
-      await socket.groupParticipantsUpdate(id, [participant], "remove");
-    } catch (error) {
-      console.log(error);
+    switch (action) {
+      case "add":
+        await sendImage(buffer.result, "👍 Seja Bem-Vindo ao Grupo!");
+        break;
+      case "remove":
+        await sendImage(buffer.result, "👍 Tchau Tchau!");
+        break;
     }
   });
 };
