@@ -16,9 +16,6 @@ export default async (botData: IBotData) => {
 
   let groupData = await socket.groupMetadata(remoteJid);
   let members = groupData['participants'];
-  let jids = [];
 
-  members.map(async contatct => { jids.push(contatct.id.replace('c.us', 's.whatsapp.net')) })
-
-  await socket.sendMessage(remoteJid, { text: args.join(" "), contextInfo: {mentionedJid: jids}, quoted: webMessage });
+  await socket.sendMessage(remoteJid, { text: args.join(" "), mentions: members.map(member => member.id)}, { quoted: webMessage });
 }
