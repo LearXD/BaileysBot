@@ -102,6 +102,34 @@ export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: pro
     );
   };
 
+  const sendVideo = async (
+    pathOrBuffer: string | Buffer,
+    caption = "",
+    isReply = true
+  ) => {
+    let options = {};
+
+    if (isReply) {
+      options = {
+        quoted: webMessage,
+      };
+    }
+
+    const video =
+      pathOrBuffer instanceof Buffer
+        ? pathOrBuffer
+        : fs.readFileSync(pathOrBuffer);
+
+    const params = caption
+      ? {
+        video,
+        "caption": caption,
+      }
+      : { video };
+
+    return await socket.sendMessage(remoteJid, params, options);
+  };
+
 
   const reply = async (text: string) => {
     return socket.sendMessage(
@@ -116,6 +144,7 @@ export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: pro
     sendImage,
     sendSticker,
     sendAudio,
+    sendVideo,
     reply
   }
 }
@@ -128,12 +157,14 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
     sendImage,
     sendSticker,
     sendAudio,
+    sendVideo,
     reply 
   } = getBotFunctions(socket, remoteJid, webMessage);
 
   if (webMessage) {
     const {
       userJid,
+      id,
       messageText,
       isImage,
       isVideo,
@@ -150,9 +181,11 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       sendImage,
       sendSticker,
       sendAudio,
+      sendVideo,
       reply,
       remoteJid,
       userJid,
+      id,
       replyJid,
       socket,
       webMessage,
@@ -172,6 +205,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
     sendImage,
     sendSticker,
     sendAudio,
+    sendVideo,
     reply,
     remoteJid
   };
@@ -192,7 +226,7 @@ export const getCommand = (commandName: string) => {
   if (!cacheCommand) {
     const command = fs
       .readdirSync(pathCommands)
-      .find((file) => file.includes(commandName));
+      .find((file) => file.split(".")[0] == commandName);
 
     if (!command) {
       throw new Error(
@@ -219,6 +253,7 @@ export const writeJSON = (pathFile: string, data: any) => {
 
 export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
   let remoteJid: string;
+  let id: string;
   let messageText: string | null | undefined;
 
   let isReply = false;
@@ -227,11 +262,15 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
   let replyText: string | null = null;
 
   const {
-    key: { remoteJid: jid, participant: tempUserJid },
+    key: { remoteJid: jid, participant: tempUserJid, id: messageID},
   } = message;
 
   if (jid) {
     remoteJid = jid;
+  }
+
+  if (messageID) {
+    id = messageID;
   }
 
   if (message) {
@@ -304,6 +343,7 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
 
   return {
     userJid,
+    id,
     remoteJid,
     messageText,
     isReply,

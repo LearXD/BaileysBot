@@ -16,8 +16,15 @@ export interface IBotData {
     isReply?: boolean,
     ptt?: boolean
   ) => Promise<proto.WebMessageInfo>;
+  sendVideo: (
+    pathOrBuffer: string | Buffer,
+    caption?: string,
+    isReply?: boolean,
+    gifPlayback?: boolean
+  ) => Promise<proto.WebMessageInfo>;
   reply: (text: string) => Promise<proto.WebMessageInfo>;
   socket?: any;
+  id?: string;
   remoteJid?: string;
   replyJid?: string;
   userJid?: string;

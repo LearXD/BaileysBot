@@ -1,12 +1,17 @@
 import path from 'path';
+import fs from 'fs';
+
 import { general } from '../configurations/general';
-import { getBotData, readJSON } from "../functions";
+import { getBotData } from "../functions";
 import { IBotData } from "../interfaces/IBotData";
 
 export default async (botData: IBotData) => {
     const { reply } = botData;
-    const commandsPath = path.join(__dirname, "..", "..", "cache", "commands.json");
-    const commands = readJSON(commandsPath);
+    const commandsPath = path.join(__dirname);
+
+    const commands = fs
+      .readdirSync(commandsPath)
+      .map((filename) => { return `${filename.split(".")[0]}: [{desrição}]`});
 
     if(commands.length <= 0) return reply("⚠ Não há nenhum comando disponível!");
 
@@ -14,5 +19,6 @@ export default async (botData: IBotData) => {
     commands.map((command, pos) => {
         text += `\n- ${general.prefix}${command}`;
     })
+    
     reply(text);
 };

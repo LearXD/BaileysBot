@@ -4,7 +4,6 @@
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@hapi/boom": "^10.0.0",
     "fluent-ffmpeg": "^2.1.2",
-    "got": "^12.1.0",
     "node-fetch": "^2.6.7",
     "qrcode-terminal": "^0.12.0",
     "request": "^2.88.2",
