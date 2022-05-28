@@ -13,5 +13,7 @@ npm install
 npm run dev
 ```
 
+Dependencias: NodeJs, NPM
+
 
 
