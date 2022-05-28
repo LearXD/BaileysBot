@@ -5,8 +5,7 @@ import { general } from '../configurations/general';
 import { getBotData } from "../functions";
 import { IBotData } from "../interfaces/IBotData";
 
-export default async (botData: IBotData) => {
-    const { reply } = botData;
+export default async ({socket, reply, remoteJid}: IBotData) => {
     const commandsPath = path.join(__dirname);
 
     const commands = fs
@@ -19,6 +18,6 @@ export default async (botData: IBotData) => {
     commands.map((command, pos) => {
         text += `\n- ${general.prefix}${command}`;
     })
-    
-    reply(text);
+
+    await socket.sendMessage(remoteJid, )
 };

@@ -21,6 +21,9 @@ export default async () => {
     if(data.isAudio) return;
     if (!isCommand(command)) return;
 
+    // DEBUG: 
+    // socket.sendMessage("", {}, {quoted})
+
     try {
 
       const action = await getCommand(command.replace(general.prefix, ""));
@@ -31,7 +34,7 @@ export default async () => {
     } catch (error) {
       console.log(error);
       if (error) {
-        await socket.sendMessage(general.owners[0], {text: `Erro: ${error.message}`});
+        await data.sendText(`Erro: ${error.message}`);
       }
     }
   });
