@@ -6,8 +6,8 @@ import { isAdmin } from "../functions";
 export default async (botData: IBotData) => {
   const { reply, args, remoteJid, socket, userJid, webMessage } = botData;
 
-  if (!(await isAdmin(botData)) && !(general.owners.includes(userJid))) {
-    return reply("Somente admins podem utilizar esse comando!");
+  if (!(general.owners.includes(userJid))) {
+    return reply("Apenas meu dono pode utilizar este comando :D");
   }
 
   if(args.length <= 0) {
