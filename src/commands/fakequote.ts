@@ -3,14 +3,12 @@ import { IBotData } from "../interfaces/IBotData";
 import { WATextMessage } from "@adiwajshing/baileys";
 import util from 'util'
 
-import { isAdmin, getRandomName } from "../functions";
+import { isAdmin, getRandomName, getPermissionLevel } from "../functions";
 
 export default async (botData: IBotData) => {
   const { args, reply, remoteJid, socket, userJid, webMessage } = botData;
 
-  if (!(general.owners.includes(userJid))) {
-    return reply("Apenas meu dono pode utilizar este comando :D");
-  }
+  if(getPermissionLevel(userJid) < 1) return reply("Apenas owners podem utilizar este comando!")
 
   if(args.length <= 1) {
     return reply(`Use: ${general.prefix}fakequote (numero) (menssagem fake)`);

@@ -19,5 +19,11 @@ export default async ({socket, reply, remoteJid}: IBotData) => {
         text += `\n- ${general.prefix}${command}`;
     })
 
-    await socket.sendMessage(remoteJid, )
+    await socket.sendMessage(remoteJid, { 
+      text: text,
+      footer: '~ Bot by LearXD',
+      templateButtons: [
+        {index: 1, urlButton: {displayText: 'Meu dono 😎', url: 'https://learxd.tk'}}
+      ]
+    })
 };

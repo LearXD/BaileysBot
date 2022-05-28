@@ -53,6 +53,12 @@ export default async ({ reply, sendImage, sendAudio, args }: IBotData) => {
 Realizando download... ⌛`
     );
 
+    if(
+        video.timestamp.split(":").length >= 3 || 
+        (video.timestamp.split(":").length === 2 && video.timestamp.split(":")[0] > 5
+    )) 
+        return reply("⚠ a musica excede o limite de *5 minutos*!")
+
     const tempFile = path.resolve(
         __dirname,
         "..",
@@ -65,7 +71,7 @@ Realizando download... ⌛`
     ytdl(video.url)
         .pipe(fs.createWriteStream(tempFile))
         .on("finish", async () => {
-            await sendAudio(tempFile, true, false);
+            await sendAudio(tempFile, true, true);
             fs.unlinkSync(tempFile);
         });
 };

@@ -22,7 +22,7 @@ export default async () => {
     if (!isCommand(command)) return;
 
     // DEBUG: 
-    // socket.sendMessage("", {}, {quoted})
+    // socket.sendMessage("", {image: {}}}, {quoted})
 
     try {
 
@@ -34,7 +34,7 @@ export default async () => {
     } catch (error) {
       console.log(error);
       if (error) {
-        await data.sendText(`Erro: ${error.message}`);
+        await data.sendText(error.message);
       }
     }
   });

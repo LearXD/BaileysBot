@@ -3,6 +3,7 @@
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
     "@hapi/boom": "^10.0.0",
+    "axios": "^0.27.2",
     "fluent-ffmpeg": "^2.1.2",
     "node-fetch": "^2.6.7",
     "qrcode-terminal": "^0.12.0",

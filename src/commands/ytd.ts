@@ -53,6 +53,12 @@ export default async ({ reply, sendImage, sendVideo, args }: IBotData) => {
 Realizando download... ⌛`
     );
 
+    if(
+        video.timestamp.split(":").length >= 3 || 
+        (video.timestamp.split(":").length === 2 && video.timestamp.split(":")[0] > 5
+    )) 
+        return reply("⚠ O video excede o limite de *5 minutos*!")
+
     const tempFile = path.resolve(
         __dirname,
         "..",
@@ -61,6 +67,8 @@ Realizando download... ⌛`
         "temp",
         getRandomName("mp4")
     );
+
+    
 
     ytdl(video.url)
         .pipe(fs.createWriteStream(tempFile))

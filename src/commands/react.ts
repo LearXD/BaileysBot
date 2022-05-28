@@ -1,9 +1,4 @@
-import { general } from "../configurations/general";
 import { IBotData } from "../interfaces/IBotData";
-
-import util from 'util'
-
-import { isAdmin } from "../functions";
 
 export default async (botData: IBotData) => {
   const { args, reply, remoteJid, socket, userJid, webMessage } = botData;
