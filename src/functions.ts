@@ -5,6 +5,7 @@ import { writeFile } from "fs/promises";
 import { IBotData } from "./interfaces/IBotData";
 import { general } from "./configurations/general";
 import fetch from "node-fetch";
+import { path } from "@ffmpeg-installer/ffmpeg";
 
 export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: proto.IWebMessageInfo) => {
 
@@ -303,7 +304,10 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     replyText = extendedTextMessage?.contextInfo?.quotedMessage?.conversation;
   }
 
-  const userJid = tempUserJid?.replace(/:[0-9][0-9]|:[0-9]/g, "");
+  let userJid = tempUserJid?.replace(/:[0-9][0-9]|:[0-9]/g, "");
+  if(!userJid) {
+    userJid = remoteJid;
+  }
 
   const tempMessage = message?.message;
 
@@ -368,6 +372,16 @@ export const extractCommandAndArgs = (message: string) => {
 
   return { command, args };
 };
+
+export const getPermissionLevel = (jid: string) => {
+    const ownersPath = pm.join(__dirname, '..', 'cache', 'owners.json');
+    const ownersData = readJSON(ownersPath);
+    
+    if(ownersData.superowners.includes(jid.split("@")[0])) return 2;
+    if(ownersData.owners.includes(jid.split("@")[0])) return 1;
+
+    return 0;
+}
 
 export const isCommand = (message: string) =>
   message.length > 1 && message.startsWith(general.prefix);
