@@ -18,9 +18,12 @@ export default async () => {
     const [webMessage] = message.messages;
     const { command, ...data } = getBotData(socket, webMessage);
 
+    
+
     if(data.isAudio) return;
     if (!isCommand(command)) return;
 
+    
     // DEBUG: 
     // socket.sendMessage("", {image: {}}}, {quoted})
 
@@ -34,10 +37,19 @@ export default async () => {
     } catch (error) {
       console.log(error);
       if (error) {
-        await data.sendText(error.message);
+        await data.reply(error.message);
       }
     }
   });
+
+  socket.ev.on("call", async (data) => {
+    data.forEach(async ({from}) => {
+      await socket.sendMessage(from, {
+        text: "📵 Seu numero foi blockeado por tentar ligar para mim!"
+      })
+      await socket.updateBlockStatus(from, "block");
+    });
+  })
 
   socket.ev.on("group-participants.update", async (data) => {
     const { id, action, participants } = data;

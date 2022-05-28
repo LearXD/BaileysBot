@@ -336,6 +336,10 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage
       ?.documentMessage;
 
+  const isQuoted = 
+    !!tempMessage?.extendedTextMessage || 
+    !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage;
+
   let mentionedJid = "";
 
   let mentionedJidObject =

@@ -1,11 +1,13 @@
+import { DownloadableMessage } from "@adiwajshing/baileys";
 import fs from "fs";
 import path from "path";
 
 import ffmpeg from "fluent-ffmpeg";
-
 import { IBotData } from "../interfaces/IBotData";
 
 import { downloadImage, downloadVideo, getRandomName } from "../functions";
+
+import util from 'util'
 
 export default async ({
   isImage,
@@ -18,8 +20,6 @@ export default async ({
     return await reply(`⚠ Por favor, envie uma imagem ou um vídeo!`);
   }
 
-  await reply("Aguarde... Gerando figurinha... ⌛");
-
   const resultPath = path.resolve(
     __dirname,
     "..",
@@ -30,7 +30,9 @@ export default async ({
   );
 
   if (isImage) {
+
     const imagePath = await downloadImage(webMessage, getRandomName());
+    await reply("Aguarde... Gerando figurinha... ⌛");
 
     ffmpeg(imagePath)
       .input(imagePath)

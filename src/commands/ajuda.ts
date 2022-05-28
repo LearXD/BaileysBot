@@ -2,7 +2,6 @@ import path from 'path';
 import fs from 'fs';
 
 import { general } from '../configurations/general';
-import { getBotData } from "../functions";
 import { IBotData } from "../interfaces/IBotData";
 
 export default async ({socket, reply, remoteJid}: IBotData) => {

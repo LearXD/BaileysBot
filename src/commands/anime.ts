@@ -24,13 +24,11 @@ export default async ({ sendImage, args, reply, socket, remoteJid }: IBotData) =
         }
     })
 
-    console.log(util.inspect(res.data, {showHidden: false, depth: null, colors: true}))
     if (res.data.status_code !== 200) {
         return await reply(`Nenhum anime foi encontrado com o nome *${args.join(" ")}*!`)
     }
 
     const animeData = res.data.data.documents ? res.data.data.documents[0] : res.data.data[0];
-    console.log(animeData)
     let message = `🔎 *ANIME ENCONTRADO*
   
   *Nome*: ${animeData.titles.en}
