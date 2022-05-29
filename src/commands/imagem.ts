@@ -1,7 +1,9 @@
 import { IBotData } from "../interfaces/IBotData";
-
+import fs from 'fs';
 import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../functions";
 import { query } from '../visionManager';
+
+import util from 'util';
 
 
 export default async ({ reply, isImage, webMessage}: IBotData) => {
@@ -11,14 +13,9 @@ export default async ({ reply, isImage, webMessage}: IBotData) => {
     }
 
     const imagePath = await downloadImage(webMessage, getRandomName());
-    const res = await query(imagePath, "TEXT_DETECT");
+    await reply("🔎 FAZENDO BUSCA...")
+    const res = await query(imagePath, "WEB_DETECTION");
+    fs.unlinkSync(imagePath)
     
-    await reply(
-    `
-🤖 Informações extraidas!
-
-*Texto da imagem:* 
-
-${res.fullTextAnnotation.text}
-    `)
+    console.log(util.inspect(res, {showHidden: false, depth: null, colors: true}))
 }

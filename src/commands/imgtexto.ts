@@ -1,5 +1,7 @@
 import { IBotData } from "../interfaces/IBotData";
 
+import fs from 'fs';
+
 import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../functions";
 import { query } from '../visionManager';
 
@@ -11,7 +13,11 @@ export default async ({ reply, isImage, webMessage}: IBotData) => {
     }
 
     const imagePath = await downloadImage(webMessage, getRandomName());
+
+    await reply("🔎 PROCESSANDO TEXTO...")
+
     const res = await query(imagePath, "TEXT_DETECT");
+    fs.unlinkSync(imagePath)
     
     await reply(
     `
