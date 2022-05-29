@@ -172,6 +172,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       isSticker,
       isAudio,
       isDocument,
+      mentionedJid,
       replyJid,
     } = extractDataFromWebMessage(webMessage);
 
@@ -196,6 +197,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       isVideo,
       isSticker,
       isAudio,
+      mentionedJid,
       isDocument
     };
 
@@ -340,14 +342,8 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     !!tempMessage?.extendedTextMessage || 
     !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage;
 
-  let mentionedJid = "";
-
-  let mentionedJidObject =
+  const mentionedJid =
     tempMessage?.extendedTextMessage?.contextInfo?.mentionedJid;
-
-  if (mentionedJidObject) {
-    mentionedJid = mentionedJidObject[0];
-  }
 
   return {
     userJid,

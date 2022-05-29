@@ -55,16 +55,21 @@ export default async () => {
     const { id, action, participants } = data;
     const { sendImage } = getBotFunctions(socket, id);
 
-    const image = await socket.profilePictureUrl(participants[0], "image");
-    const buffer = await getBuffer(image);
+    try {
+      const image = await socket.profilePictureUrl(participants[0], "image");
+      const buffer = await getBuffer(image);
+  
+      switch (action) {
+        case "add":
+          await sendImage(buffer.result, "👍 Seja Bem-Vindo(a) ao Grupo!");
+          break;
+        case "remove":
+          //await sendImage(buffer.result, "👍 Tchau Tchau!");
+          break;
+      }
+    } catch(error) {
 
-    switch (action) {
-      case "add":
-        await sendImage(buffer.result, "👍 Seja Bem-Vindo(a) ao Grupo!");
-        break;
-      case "remove":
-        await sendImage(buffer.result, "👍 Tchau Tchau!");
-        break;
     }
+    
   });
 };

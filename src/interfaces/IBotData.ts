@@ -35,5 +35,6 @@ export interface IBotData {
   isAudio?: boolean;
   isDocument?: boolean;
   command?: string;
+  mentionedJid?: any;
   args?: any;
 }
