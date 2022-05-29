@@ -31,9 +31,9 @@ export default async ({ sendImage, args, reply, socket, remoteJid }: IBotData) =
     const animeData = res.data.data.documents ? res.data.data.documents[0] : res.data.data[0];
     let message = `🔎 *ANIME ENCONTRADO*
   
-  *Nome*: ${animeData.titles.en}
+  *Nome*: ${animeData.titles.en.replace(/<[^>]*>?/gm, '')}
   
-  *Descrição*: ${animeData.descriptions.en}
+  *Descrição*: ${animeData.descriptions.en.replace(/<[^>]*>?/gm, '')}
 
   *Lançamento*: ${animeData.start_date}
   *Ultima Atualização*: ${animeData.end_date}
