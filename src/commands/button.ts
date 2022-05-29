@@ -5,8 +5,6 @@ export default async (botData: IBotData) => {
     const { args, socket, remoteJid} = botData;
 
     if(!(args[0] || args[1] || args[2] || args[3])) return;
-    
-    console.log(remoteJid)
 
     await socket.sendMessage(remoteJid, {
         text: args[0],

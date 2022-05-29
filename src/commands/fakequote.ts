@@ -1,7 +1,7 @@
 import { general } from "../configurations/general";
 import { IBotData } from "../interfaces/IBotData";
 import { WATextMessage } from "@adiwajshing/baileys";
-import util from 'util'
+
 
 import { isAdmin, getRandomName, getPermissionLevel } from "../functions";
 
@@ -31,7 +31,6 @@ export default async (botData: IBotData) => {
   args.shift();
   fakeWebMessage.message.extendedTextMessage.text = args.join(" ")
 
-  //console.log(util.inspect(webMessage, {showHidden: false, depth: null, colors: true}))
   await socket.sendMessage(remoteJid, {
        text: ".",
     }, { quoted: fakeWebMessage });
