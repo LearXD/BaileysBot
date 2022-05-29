@@ -2,10 +2,12 @@
   "dependencies": {
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
+    "@google-cloud/vision": "^2.4.2",
     "@hapi/boom": "^10.0.0",
     "axios": "^0.27.2",
     "fluent-ffmpeg": "^2.1.2",
     "google-tts-api": "^2.0.2",
+    "image-to-base64": "^2.2.0",
     "node-fetch": "^2.6.7",
     "qrcode-terminal": "^0.12.0",
     "request": "^2.88.2",

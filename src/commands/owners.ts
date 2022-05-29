@@ -11,7 +11,7 @@ export default async ({ reply, args, userJid }: IBotData) => {
     return await reply("⚠ Apenas um Super Usuário pode utilizar este comando!");
   }
 
-  const ownersPath = path.join(__dirname, '..', '..', 'cache', 'owners.json');
+  const ownersPath = path.join(__dirname, '..', '..', 'settings', 'owners.json');
   let ownersData = readJSON(ownersPath);
 
   if(args.length <= 0) {

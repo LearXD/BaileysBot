@@ -215,7 +215,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
 };
 
 export const getCommand = (commandName: string) => {
-  const pathCache = pm.join(__dirname, "..", "cache", "commands.json");
+  const pathCache = pm.join(__dirname, "..", "settings", "commands.json");
   const pathCommands = pm.join(__dirname, "commands");
 
   const cacheCommands = readJSON(pathCache);
@@ -374,7 +374,7 @@ export const extractCommandAndArgs = (message: string) => {
 };
 
 export const getPermissionLevel = (jid: string) => {
-    const ownersPath = pm.join(__dirname, '..', 'cache', 'owners.json');
+    const ownersPath = pm.join(__dirname, '..', 'settings', 'owners.json');
     const ownersData = readJSON(ownersPath);
     
     if(ownersData.superowners.includes(jid.split("@")[0])) return 2;

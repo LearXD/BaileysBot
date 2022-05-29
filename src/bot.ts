@@ -1,4 +1,3 @@
-import path from "path";
 import { general } from "./configurations/general";
 import { connect } from "./connection";
 import {
@@ -7,9 +6,8 @@ import {
   getBuffer,
   getCommand,
   isCommand,
-  readJSON,
+  onlyNumbers
 } from "./functions";
-
 
 export default async () => {
   const socket = await connect();
@@ -18,21 +16,14 @@ export default async () => {
     const [webMessage] = message.messages;
     const { command, ...data } = getBotData(socket, webMessage);
 
-    
-
-    if(data.isAudio) return;
+    if (data.isAudio) return;
     if (!isCommand(command)) return;
-
-    
-    // DEBUG: 
-    // socket.sendMessage("", {image: {}}}, {quoted})
 
     try {
 
       const action = await getCommand(command.replace(general.prefix, ""));
       await socket.sendReadReceipt(data.remoteJid, data.userJid, [data.id])
       await action({ command, ...data });
-      
 
     } catch (error) {
       console.log(error);
@@ -43,7 +34,7 @@ export default async () => {
   });
 
   socket.ev.on("call", async (data) => {
-    data.forEach(async ({from}) => {
+    data.forEach(async ({ from }) => {
       await socket.sendMessage(from, {
         text: "📵 Seu numero foi blockeado por tentar ligar para mim!"
       })
@@ -51,25 +42,34 @@ export default async () => {
     });
   })
 
-  socket.ev.on("group-participants.update", async (data) => {
-    const { id, action, participants } = data;
-    const { sendImage } = getBotFunctions(socket, id);
+  socket.ev.on("group-participants.update", async ({ id, action, participants }) => {
+    const groupMetadata = await socket.groupMetadata(id);
+
+    console.log(groupMetadata)
+    let url = "https://kanto.legiaodosherois.com.br/w760-h398-gnw-cfill-q95/wp-content/uploads/2022/03/legiao_1Chpjai7RW84.jpg.jpeg";
 
     try {
-      const image = await socket.profilePictureUrl(participants[0], "image");
-      const buffer = await getBuffer(image);
-  
-      switch (action) {
-        case "add":
-          await sendImage(buffer.result, "👍 Seja Bem-Vindo(a) ao Grupo!");
-          break;
-        case "remove":
-          //await sendImage(buffer.result, "👍 Tchau Tchau!");
-          break;
-      }
-    } catch(error) {
+      url = (await socket.profilePictureUrl(id, "image"));
+    } catch (error) { }
 
+    const image = await getBuffer(url);
+
+    switch (action) {
+      case "add":
+        await socket.sendMessage(participants[0], { image: { url: url }, caption: `
+
+        👍 Seja Bem-Vindo(a) ao _${groupMetadata.subject}_
+
+        Descrição: ${groupMetadata.desc ?? "Sem descrição..."}
+        Bate papo disponível: ${groupMetadata.restrict ? "Não" : "Sim"}
+        
+        Dono do grupo: @${onlyNumbers(groupMetadata.owner)}
+
+        `});
+        break;
+      case "remove":
+        //await sendImage(buffer.result, "👍 Tchau Tchau!");
+        break;
     }
-    
   });
 };
