@@ -13,7 +13,7 @@ export const query = async (
     queryType: "TEXT_DETECT" | "DOCUMENT_TEXT" | "LANDMARK" | "IMAGE_PROPETIES" | "WEB_DETECTION" | "OBJECT_DETECTION"
 ) => {
 
-    const authPath = path.join(__dirname, '..', 'settings', 'vision_auth.json');
+    const authPath = path.join(__dirname, '..', 'settings', 'vision_auth_file.json');
     const CREDENTIALS = readJSON(authPath);
 
     const client = new vision.ImageAnnotatorClient({
