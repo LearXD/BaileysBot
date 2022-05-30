@@ -17,7 +17,11 @@ export default async ({ reply, sendImage, sendAudio, args }: IBotData) => {
 
     const maxLength = 100;
 
-    if (!args.join(" ") || args.join(" ").length > 100) {
+    if(args.length < 1) {
+        return await reply(desciption.desciption)
+    }
+
+    if (args.join(" ").length > 100) {
         return await reply(`⚠ Limite de ${maxLength} caracteres por pesquisa!`);
     }
 
@@ -74,11 +78,12 @@ Realizando download... ⌛`
     );
 
     ytdl(video.url, {
+        quality: 'highestaudio',
         filter: 'audioonly'
     })
         .pipe(fs.createWriteStream(tempFile))
         .on("finish", async () => {
-            await sendAudio(tempFile, true, true);
+            await sendAudio(tempFile, true, false);
             fs.unlinkSync(tempFile);
         });
 };

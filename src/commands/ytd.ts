@@ -18,6 +18,10 @@ export default async ({ reply, sendImage, sendVideo, args }: IBotData) => {
 
     const maxLength = 100;
 
+    if(args.length < 1) {
+        return await reply(desciption.desciption)
+    }
+
     if (!args.join(" ") || args.join(" ").length > 100) {
         return await reply(`⚠ Limite de ${maxLength} caracteres por pesquisa!`);
     }
@@ -25,7 +29,7 @@ export default async ({ reply, sendImage, sendVideo, args }: IBotData) => {
     const result = await yts(args.join(" "));
 
     if (!result || !result.videos.length) {
-        return await reply(`⚠ Nenhuma música encontrada!`);
+        return await reply(`⚠ Nenhum vídeo encontrado!`);
     }
 
     const video = result.videos[0];
@@ -61,7 +65,7 @@ Realizando download... ⌛`
 
     if(
         video.timestamp.split(":").length >= 3 || 
-        (video.timestamp.split(":").length === 2 && video.timestamp.split(":")[0] > 5
+        (video.timestamp.split(":").length === 2 && video.timestamp.split(":")[0] > 10
     )) 
         return reply("⚠ O video excede o limite de *5 minutos*!")
 
@@ -74,12 +78,17 @@ Realizando download... ⌛`
         getRandomName("mp4")
     );
 
+    try {
+        ytdl(video.url, {
+            quality: 'highest',
+        })
+            .pipe(fs.createWriteStream(tempFile))
+            .on("finish", async () => {
+                await sendVideo(tempFile);
+                fs.unlinkSync(tempFile);
+            });
+    } catch (error) {
+        throw error;
+    }
     
-
-    ytdl(video.url)
-        .pipe(fs.createWriteStream(tempFile))
-        .on("finish", async () => {
-            await sendVideo(tempFile);
-            fs.unlinkSync(tempFile);
-        });
 };

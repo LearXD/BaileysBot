@@ -2,7 +2,6 @@ import { general } from "./configurations/general";
 import { connect } from "./connection";
 import {
   getBotData,
-  getBotFunctions,
   getBuffer,
   getCommand,
   isCommand,
@@ -16,14 +15,16 @@ export default async () => {
     const [webMessage] = message.messages;
     const { command, ...data } = getBotData(socket, webMessage);
 
+    
+
     if (data.isAudio) return;
     if (!isCommand(command)) return;
 
     try {
 
       const action = await getCommand(command.replace(general.prefix, ""));
-      await socket.sendReadReceipt(data.remoteJid, data.userJid, [data.id])
       await action({ command, ...data });
+      await socket.sendReadReceipt(data.remoteJid, data.userJid, [ data.id ])
 
     } catch (error) {
       console.log(error);

@@ -10,8 +10,8 @@ import { readJSON } from './functions';
 
 export const query = async (
     imagePath: string,
-    queryType: "TEXT_DETECT" | "DOCUMENT_TEXT" | "LANDMARK" | "IMAGE_PROPETIES" | "WEB_DETECTION" | "OBJECT_DETECTION"
-) => {
+    queryType: "TEXT_DETECT" | "DOCUMENT_TEXT" | "LANDMARK" | "IMAGE_PROPETIES" | "WEB_DETECTION" | "OBJECT_DETECTION" | "ADULT_DETECTION" | "FACE_DETECTION"
+) => { 
 
     const authPath = path.join(__dirname, '..', 'settings', 'vision_auth_file.json');
     const CREDENTIALS = readJSON(authPath);
@@ -36,5 +36,10 @@ export const query = async (
             return (await client.webDetection(imagePath))[0];
         case "OBJECT_DETECTION":
             return (await client.objectLocalization(imagePath))[0];
+        case "ADULT_DETECTION":
+            return (await client.safeSearchDetection(imagePath))[0];
+        case "FACE_DETECTION":
+            return (await client.faceDetection(imagePath))[0];
+
     }
 }

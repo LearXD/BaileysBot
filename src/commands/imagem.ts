@@ -14,7 +14,7 @@ export default async ({ reply, isImage, webMessage}: IBotData) => {
 
     const imagePath = await downloadImage(webMessage, getRandomName());
     await reply("🔎 FAZENDO BUSCA...")
-    const res = await query(imagePath, "WEB_DETECTION");
+    const res = await query(imagePath, "ADULT_DETECTION");
     fs.unlinkSync(imagePath)
     
     console.log(util.inspect(res, {showHidden: false, depth: null, colors: true}))
