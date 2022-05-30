@@ -1,6 +1,6 @@
 node_modules
 build
 package-lock.json
-settings/auth
+settings/auth.json
 config.json
 settings/vision_auth_file.json
