@@ -7,6 +7,12 @@ import ytdl from "ytdl-core";
 import { IBotData } from "../interfaces/IBotData";
 import { getRandomName } from "../functions";
 
+export const desciption = {
+    usage: `ytd (nome do video ou link)`,
+    desciption: `Receba o download do video no youtube!`
+  }
+
+
 export default async ({ reply, sendImage, sendVideo, args }: IBotData) => {
     await reply("Aguarde... Pesquisando... ⌛");
 

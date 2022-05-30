@@ -57,7 +57,7 @@ export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: pro
         ? pathOrBuffer
         : fs.readFileSync(pathOrBuffer);
 
-    return await socket.sendMessage(remoteJid, { sticker}, options);
+    return await socket.sendMessage(remoteJid, { sticker }, options);
   };
 
   const sendAudio = async (
@@ -153,13 +153,13 @@ export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: pro
 export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBotData => {
   const { remoteJid } = webMessage.key;
 
-  const { 
+  const {
     sendText,
     sendImage,
     sendSticker,
     sendAudio,
     sendVideo,
-    reply 
+    reply
   } = getBotFunctions(socket, remoteJid, webMessage);
 
   if (webMessage) {
@@ -215,34 +215,20 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
 };
 
 export const getCommand = (commandName: string) => {
-  const pathCache = pm.join(__dirname, "..", "settings", "commands.json");
   const pathCommands = pm.join(__dirname, "commands");
 
-  const cacheCommands = readJSON(pathCache);
-
   if (!commandName) return;
+  
+  const command = fs
+    .readdirSync(pathCommands)
+    .find((file) => file.split(".")[0] == commandName);
 
-  const cacheCommand = cacheCommands.find(
-    (name: string) => name === commandName
-  );
-
-  if (!cacheCommand) {
-    const command = fs
-      .readdirSync(pathCommands)
-      .find((file) => file.split(".")[0] == commandName);
-
-    if (!command) {
-      throw new Error(
-        `⚠ Esse comando não existe! Digite ${general.prefix}ajuda [ Para ver a lista de commandos ]`
-      );
-    }
-
-    writeJSON(pathCache, [...cacheCommands, commandName]);
-
-    return require(`./commands/${command}`).default;
+  if (!command) {
+    throw new Error(
+      `⚠ Esse comando não existe! Digite ${general.prefix}ajuda [ Para ver a lista de commandos ]`
+    );
   }
-
-  return require(`./commands/${cacheCommand}`).default;
+  return require(`./commands/${command}`).default;
 };
 
 export const readJSON = (pathFile: string) => {
@@ -265,7 +251,7 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
   let replyText: string | null = null;
 
   const {
-    key: { remoteJid: jid, participant: tempUserJid, id: messageID},
+    key: { remoteJid: jid, participant: tempUserJid, id: messageID },
   } = message;
 
   if (jid) {
@@ -307,7 +293,7 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
   }
 
   let userJid = tempUserJid?.replace(/:[0-9][0-9]|:[0-9]/g, "");
-  if(!userJid) {
+  if (!userJid) {
     userJid = remoteJid;
   }
 
@@ -338,8 +324,8 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage
       ?.documentMessage;
 
-  const isQuoted = 
-    !!tempMessage?.extendedTextMessage || 
+  const isQuoted =
+    !!tempMessage?.extendedTextMessage ||
     !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage;
 
   const mentionedJid =
@@ -374,13 +360,13 @@ export const extractCommandAndArgs = (message: string) => {
 };
 
 export const getPermissionLevel = (jid: string) => {
-    const ownersPath = pm.join(__dirname, '..', 'settings', 'owners.json');
-    const ownersData = readJSON(ownersPath);
-    
-    if(ownersData.superowners.includes(jid.split("@")[0])) return 2;
-    if(ownersData.owners.includes(jid.split("@")[0])) return 1;
+  const ownersPath = pm.join(__dirname, '..', 'settings', 'owners.json');
+  const ownersData = readJSON(ownersPath);
 
-    return 0;
+  if (ownersData.superowners.includes(jid.split("@")[0])) return 2;
+  if (ownersData.owners.includes(jid.split("@")[0])) return 1;
+
+  return 0;
 }
 
 export const isCommand = (message: string) =>

@@ -1,5 +1,11 @@
 import { IBotData } from "../interfaces/IBotData";
 
+export const desciption = {
+  usage: `react (emoji)`,
+  desciption: `Faça-me reagir à uma menssagem.`
+}
+
+
 export default async (botData: IBotData) => {
   const { args, reply, remoteJid, socket, userJid, webMessage } = botData;
 

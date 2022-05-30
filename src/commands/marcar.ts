@@ -3,6 +3,11 @@ import { IBotData } from "../interfaces/IBotData";
 
 import { getPermissionLevel } from "../functions";
 
+export const desciption = {
+  usage: `marcar (menssagem)`,
+  desciption: `Marque todos no grupo sem que apareça.`
+}
+
 export default async (botData: IBotData) => {
   const { reply, args, remoteJid, socket, userJid, webMessage } = botData;
 

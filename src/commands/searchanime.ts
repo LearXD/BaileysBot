@@ -1,62 +1,57 @@
-import path from 'path';
-
-import { downloadImage, getRandomName } from "../functions";
 import { IBotData } from "../interfaces/IBotData";
+import axios from "axios";
+import { getBuffer } from "../functions";
 
-import fs from "fs";
-import fetch from "node-fetch";
+export const desciption = {
+    usage: `searchanime (nome do anime)`,
+    desciption: `Veja informações de um anime.`
+  }
 
-import util from 'util';
+export default async ({ sendImage, args, reply, socket, remoteJid }: IBotData) => {
 
-export default async ({ socket, reply, isImage, webMessage, remoteJid }: IBotData) => {
-
-    if (!isImage) {
-        return await reply("⚠ Por favor, envie uma imagem!");
+    if (args.length <= 0) {
+        return await reply("Defina o nome de um anime!")
     }
 
-    const downloadPath = path.resolve(
-        __dirname,
-        "..",
-        "..",
-        "assets",
-        "temp"
-    );
+    let url = 'https://api.aniapi.com/v1/anime?title=' + args.join(" ")
 
-    const imagePath = await downloadImage(webMessage, getRandomName(), downloadPath);
-    await reply("🔎 Fazendo busca!")
-
-    const res = JSON.parse(await (await fetch("https://api.trace.moe/search", {
-        method: "POST",
-        body: fs.readFileSync(imagePath),
-        headers: { "Content-type": "image/jpeg" },
-    })).text());
-    console.log(util.inspect(res, {showHidden: false, depth: null, colors: true}))
-
-    fs.unlinkSync(imagePath)
-
-    if(res.error !== "") {
-        return await reply("✖ Um erro ocorreu ao procurar o anime!\nErro: " + res.error) 
+    if(args[0] === "random") {
+        url = 'https://api.aniapi.com/v1/random/anime/1/true'
     }
 
-    const anime = res.result[0];
-
-    const text = `🔎 *ANIME ENCONTRADO*
-
-    🔥 Frames analizados: ${res.frameCount}
-
-    Anime: ${anime.filename.split(".mp4")[0]}
-    Frames: ${anime.from} --> ${anime.to}
-    Similaridade: ${Math.round(anime.similarity * 100)}%
-
-    OBS: Resultados de menos que 80% possuem a chance de serem incorretos!
-
-    Seach by BaileysBot 😎
-    `
-    
-
-    await socket.sendMessage(remoteJid, {
-        video: { url: anime.video },
-        caption: text,
-        gifPlayback: true
+    const res = await axios.get(url, {
+        headers: {
+            //'Authorization': 'Bearer YOUR_JWT_KEY',
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+        }
     })
+
+    if (res.data.status_code !== 200) {
+        return await reply(`Nenhum anime foi encontrado com o nome *${args.join(" ")}*!`)
+    }
+
+    const animeData = res.data.data.documents ? res.data.data.documents[0] : res.data.data[0];
+    let message = `🔎 *ANIME ENCONTRADO*
+  
+  *Nome*: ${animeData.titles.en.replace(/<[^>]*>?/gm, '')}
+  
+  *Descrição*: ${animeData.descriptions.en.replace(/<[^>]*>?/gm, '')}
+
+  *Lançamento*: ${animeData.start_date}
+  *Ultima Atualização*: ${animeData.end_date}
+  *Episódios*: ${animeData.episodes_count}
+
+  *Pontuação*: ${animeData.score}`;
+
+    const image = (await getBuffer(animeData.cover_image)).result;
+
+
+    await await socket.sendMessage(remoteJid,
+        {
+            image,
+            caption: message,
+            footer: 'Consulta por BaileysBot',
+        })
+        
 }

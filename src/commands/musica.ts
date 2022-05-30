@@ -7,6 +7,11 @@ import ytdl from "ytdl-core";
 import { IBotData } from "../interfaces/IBotData";
 import { getRandomName } from "../functions";
 
+export const desciption = {
+    usage: `musica (nome do video ou link)`,
+    desciption: `Receba o download de uma musica no youtube!`
+  }
+
 export default async ({ reply, sendImage, sendAudio, args }: IBotData) => {
     await reply("Aguarde... Pesquisando... ⌛");
 
@@ -68,7 +73,9 @@ Realizando download... ⌛`
         getRandomName("mp3")
     );
 
-    ytdl(video.url)
+    ytdl(video.url, {
+        filter: 'audioonly'
+    })
         .pipe(fs.createWriteStream(tempFile))
         .on("finish", async () => {
             await sendAudio(tempFile, true, true);

@@ -1,9 +1,12 @@
 import { general } from "../configurations/general";
 import { IBotData } from "../interfaces/IBotData";
-import { WATextMessage } from "@adiwajshing/baileys";
 
+import { getPermissionLevel } from "../functions";
 
-import { isAdmin, getRandomName, getPermissionLevel } from "../functions";
+export const desciption = {
+  usage: `fakequote (numero) (menssagem)`,
+  desciption: `Faça uma resposta falsa com o numero de alguem`
+}
 
 export default async (botData: IBotData) => {
   const { args, reply, remoteJid, socket, userJid, webMessage } = botData;

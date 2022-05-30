@@ -5,6 +5,10 @@ import fs from 'fs';
 import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../functions";
 import { query } from '../visionManager';
 
+export const desciption = {
+    usage: `imgtexto (documento|imagem)`,
+    desciption: `Receba todo o texto de uma imagem.`
+  }
 
 export default async ({ reply, isImage, webMessage}: IBotData) => {
    

@@ -5,6 +5,11 @@ import path from "path";
 
 import { getPermissionLevel, readJSON, writeJSON } from "../functions";
 
+export const desciption = {
+  usage: `owners (add|remove)`,
+  desciption: `Adicione e Remova owners.`
+}
+
 export default async ({ reply, args, userJid }: IBotData) => {
 
   if (getPermissionLevel(userJid) < 2) {

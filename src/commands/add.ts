@@ -2,6 +2,11 @@ import { IBotData } from "../interfaces/IBotData";
 
 import { isAdmin, onlyNumbers } from "../functions";
 
+export const desciption = {
+  usage: `add (numero)`,
+  desciption: `Adicione pessoas no grupo.`
+}
+
 export default async (botData: IBotData) => {
   const { reply, sendText, remoteJid, socket, args } = botData;
 

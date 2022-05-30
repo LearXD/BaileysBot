@@ -3,7 +3,10 @@ import fs from 'fs';
 import { downloadImage, getRandomName } from "../functions";
 import { query } from '../visionManager';
 
-import util from 'util';
+export const desciption = {
+    usage: `search (marque ou envie uma imagem)`,
+    desciption: `Descubra informações e os sites de uma imagem!`
+  }
 
 
 export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotData) => {
@@ -18,8 +21,6 @@ export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotData
 
     const res = await query(imagePath, "WEB_DETECTION");
     fs.unlinkSync(imagePath)
-    
-    //console.log(util.inspect(res, {showHidden: false, depth: null, colors: true}))
 
     const searchData = res.webDetection;
     let linksText = "🔗 *LINKS RELACIONADOS* ⤵\n\n";
@@ -33,7 +34,7 @@ export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotData
         caption: `
         😵 Busca feita com sucesso!
         
-*Palavra-Chave mais encontrada:* ${searchData.bestGuessLabels[0].label}
+*Palavra-Chave:* ${searchData.bestGuessLabels[0].label}
         
         ${linksText}
         `}, { quoted: webMessage}

@@ -2,9 +2,15 @@ import path from 'path';
 import fs from 'fs';
 
 import { IBotData } from "../interfaces/IBotData";
-import { getPermissionLevel, getRandomName } from "../functions";
+import { getRandomName } from "../functions";
 
 import * as tts from 'google-tts-api';
+
+export const desciption = {
+  usage: `tts (codigo) (menssagem)`,
+  desciption: `Receba um audio do que foi escrito!`
+}
+
 
 
 export default async ({ socket, args, sendAudio, reply }: IBotData) => {

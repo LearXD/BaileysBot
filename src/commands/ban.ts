@@ -2,6 +2,11 @@ import { isJidGroup } from "@adiwajshing/baileys";
 import { IBotData } from "../interfaces/IBotData";
 import { isAdmin } from '../functions';
 
+export const desciption = {
+    usage: `ban (pessoas)`,
+    desciption: `Remova pessoas do grupo.`
+  }
+
 export default async (botData: IBotData) => {
 
     const {socket, reply, userJid, remoteJid, mentionedJid, webMessage } = botData;

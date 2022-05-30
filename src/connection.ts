@@ -1,13 +1,14 @@
-import makeWASocket, { DisconnectReason, useSingleFileAuthState } from "@adiwajshing/baileys";
-import { Boom } from "@hapi/boom";
 import pm from 'path';
 
+import makeWASocket, { DisconnectReason, useMultiFileAuthState } from "@adiwajshing/baileys";
+import { Boom } from "@hapi/boom";
+
+import Logger from "pino"
+
 export const connect = async () => {
-	const {state, saveState} = useSingleFileAuthState(
-		pm.resolve(__dirname, "..", "settings", "auth_info_multi.json")
-	)
-	
-	const socket = makeWASocket({ printQRInTerminal: true, auth: state });
+	const { state, saveCreds } = await useMultiFileAuthState(pm.resolve(__dirname, "..", "settings", "auth"))
+
+	const socket = makeWASocket({ printQRInTerminal: true, auth: state, logger: Logger({ level: 'silent' }) });
 	
 	socket.ev.on("connection.update", async (update) => {
 		const { connection, lastDisconnect } = update;
@@ -19,6 +20,6 @@ export const connect = async () => {
 		}
 		
 	});
-	socket.ev.on("creds.update", saveState);
+	socket.ev.on("creds.update", saveCreds);
 	return socket;
 }

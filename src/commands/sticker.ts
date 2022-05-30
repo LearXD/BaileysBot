@@ -1,4 +1,3 @@
-import { DownloadableMessage } from "@adiwajshing/baileys";
 import fs from "fs";
 import path from "path";
 
@@ -7,7 +6,10 @@ import { IBotData } from "../interfaces/IBotData";
 
 import { downloadImage, downloadVideo, getRandomName } from "../functions";
 
-import util from 'util'
+export const desciption = {
+  usage: `sticker (marque ou envie uma imagem ou video)`,
+  desciption: `Faça fogurinhas rapidamente.`
+}
 
 export default async ({
   isImage,
