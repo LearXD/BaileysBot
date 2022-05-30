@@ -56,7 +56,7 @@ apt update && apt upgrade
 apt install git
 git clone https://github.com/LearXD/BaileysBot
 cd BaileysBot
-bash install.sh
+bash termux_install.sh
 npm run build
 node .
 ```
