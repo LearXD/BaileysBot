@@ -1,0 +1,6 @@
+node_modules
+build
+package-lock.json
+settings/auth_info_multi.json
+settings/vision_auth.json
+config.json
