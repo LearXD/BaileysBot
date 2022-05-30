@@ -1,4 +1,21 @@
 {
+  "name": "bottest",
+  "version": "1.0.0",
+  "main": "build/start.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "Um bot de Whatsapp feito utilizando a API do baileys",
+  "scripts": {
+    "start": "node ./build/start.js",
+    "dev": "ts-node-dev ./src/start.ts",
+    "build": "tsc",
+    "test": "node ."
+  },
+  "devDependencies": {
+    "@types/fluent-ffmpeg": "^2.1.20",
+    "typescript": "^4.6.4"
+  },
   "dependencies": {
     "@adiwajshing/baileys": "github:adiwajshing/baileys",
     "@ffmpeg-installer/ffmpeg": "^1.1.0",
@@ -14,22 +31,5 @@
     "ts-node-dev": "^1.1.8",
     "yt-search": "^2.10.3",
     "ytdl-core": "^4.11.0"
-  },
-  "name": "bottest",
-  "version": "1.0.0",
-  "main": "index.js",
-  "scripts": {
-    "start": "node ./build/start.js",
-    "dev": "ts-node-dev ./src/start.ts",
-    "build": "tsc",
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "@types/fluent-ffmpeg": "^2.1.20",
-    "typescript": "^4.6.4"
   }
 }
