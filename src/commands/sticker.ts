@@ -1,3 +1,4 @@
+
 import fs from "fs";
 import path from "path";
 
@@ -10,6 +11,7 @@ export const desciption = {
   usage: `sticker (marque ou envie uma imagem ou video)`,
   desciption: `Faça fogurinhas rapidamente.`
 }
+
 
 export default async ({
   isImage,
