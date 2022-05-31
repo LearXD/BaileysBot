@@ -24,10 +24,10 @@ export default async ({ reply }: IBotData) => {
     if (networkRes.status === "success") {
         const { country, regionName, city, org } = networkRes;
         networkMessage = 
-`País: ${country}
-Estado: ${regionName}
-Cidade: ${city}
-Provedora: ${org}
+`*País*: ${country}
+*Estado*: ${regionName}
+*Cidade*: ${city}
+*Provedora*: ${org}
 `;
     }
 
