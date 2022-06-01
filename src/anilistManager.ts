@@ -1,3 +1,14 @@
+/*
+ * MANAGER FEITO PARA FACILITAR AS CONSULTAS
+ * CASO QUEIRA ADICIONAR ALGO, POR FAVOR, LEIA
+ * A DOCUMENTAÇÃO DA API:
+ * 
+ * DOC: https://anilist.gitbook.io/anilist-apiv2-docs/
+ * GraphQL: https://anilist.github.io/ApiV2-GraphQL-Docs/
+ * 
+ * Thanks for Anilist :D
+*/
+
 import axios from 'axios';
 
 export const query = async (
