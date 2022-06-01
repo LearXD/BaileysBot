@@ -15,7 +15,7 @@ export default async () => {
     const [webMessage] = message.messages;
     const { command, ...data } = getBotData(socket, webMessage);
 
-    
+    console.log(webMessage)
 
     if (data.isAudio) return;
     if (!isCommand(command)) return;
@@ -46,7 +46,8 @@ export default async () => {
   socket.ev.on("group-participants.update", async ({ id, action, participants }) => {
     const groupMetadata = await socket.groupMetadata(id);
 
-    console.log(groupMetadata)
+    
+
     let url = "https://kanto.legiaodosherois.com.br/w760-h398-gnw-cfill-q95/wp-content/uploads/2022/03/legiao_1Chpjai7RW84.jpg.jpeg";
 
     try {
@@ -58,13 +59,12 @@ export default async () => {
     switch (action) {
       case "add":
         await socket.sendMessage(participants[0], { image: { url: url }, caption: `
+      👍 Seja Bem-Vindo(a) ao _${groupMetadata.subject}_
 
-        👍 Seja Bem-Vindo(a) ao _${groupMetadata.subject}_
-
-        Descrição: ${groupMetadata.desc ?? "Sem descrição..."}
-        Bate papo disponível: ${groupMetadata.restrict ? "Não" : "Sim"}
+      Descrição: ${groupMetadata.desc ?? "Sem descrição..."}
+      Bate papo disponível: ${groupMetadata.restrict ? "Não" : "Sim"}
         
-        Dono do grupo: @${onlyNumbers(groupMetadata.owner)}
+      Dono do grupo: wa.me/${onlyNumbers(groupMetadata.owner)}
 
         `});
         break;

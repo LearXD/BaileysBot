@@ -167,6 +167,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       userJid,
       id,
       messageText,
+      quotedMessage,
       isImage,
       isVideo,
       isSticker,
@@ -174,9 +175,10 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       isDocument,
       mentionedJid,
       replyJid,
+      buttonsResponseMessage
     } = extractDataFromWebMessage(webMessage);
 
-    const { command, args } = extractCommandAndArgs(messageText);
+    const { command, args } = extractCommandAndArgs(buttonsResponseMessage ? buttonsResponseMessage.selectedButtonId : messageText);
 
     return {
       sendText,
@@ -189,6 +191,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       userJid,
       id,
       replyJid,
+      quotedMessage,
       socket,
       webMessage,
       command,
@@ -198,7 +201,8 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       isSticker,
       isAudio,
       mentionedJid,
-      isDocument
+      isDocument,
+      buttonsResponseMessage
     };
 
   };
@@ -324,9 +328,11 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage
       ?.documentMessage;
 
-  const isQuoted =
-    !!tempMessage?.extendedTextMessage ||
-    !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage;
+  const quotedMessage =
+    tempMessage?.extendedTextMessage ||
+    tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage;
+
+  const buttonsResponseMessage = tempMessage?.buttonsResponseMessage
 
   const mentionedJid =
     tempMessage?.extendedTextMessage?.contextInfo?.mentionedJid;
@@ -335,6 +341,7 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     userJid,
     id,
     remoteJid,
+    quotedMessage,
     messageText,
     isReply,
     replyJid,
@@ -345,6 +352,7 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     isVideo,
     isDocument,
     mentionedJid,
+    buttonsResponseMessage,
     webMessage: message,
   };
 };
@@ -363,7 +371,7 @@ export const getPermissionLevel = (jid: string) => {
   const ownersPath = pm.join(__dirname, '..', 'settings', 'owners.json');
   const ownersData = readJSON(ownersPath);
 
-  if (ownersData.superowners.includes(jid.split("@")[0])) return 2;
+  if (ownersData.superowners.includes(jid.split("@") ? jid.split("@")[0] : jid)) return 2;
   if (ownersData.owners.includes(jid.split("@")[0])) return 1;
 
   return 0;

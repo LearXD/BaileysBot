@@ -1,4 +1,5 @@
 import { proto } from "@adiwajshing/baileys";
+import { ISocket } from "./ISocket";
 
 export interface IBotData {
   sendText: (text: string) => Promise<proto.WebMessageInfo>;
@@ -23,11 +24,12 @@ export interface IBotData {
     gifPlayback?: boolean
   ) => Promise<proto.WebMessageInfo>;
   reply: (text: string) => Promise<proto.WebMessageInfo>;
-  socket?: any;
+  socket?: ISocket;
   id?: string;
   remoteJid?: string;
   replyJid?: string;
   userJid?: string;
+  quotedMessage?: any;
   webMessage?: proto.IWebMessageInfo;
   isImage?: boolean;
   isVideo?: boolean;
@@ -36,5 +38,6 @@ export interface IBotData {
   isDocument?: boolean;
   command?: string;
   mentionedJid?: any;
+  buttonsResponseMessage?: proto.IButtonsResponseMessage|null;
   args?: any;
 }

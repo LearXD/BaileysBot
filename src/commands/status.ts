@@ -3,13 +3,16 @@ import si from 'systeminformation';
 import axios from "axios";
 
 import FastSpeedtest from 'fast-speedtest-api';
+import { getPermissionLevel } from "../functions";
 
 export const desciption = {
     usage: `status`,
     desciption: `Veja as informações sobre o BOT e seu Loader...`
 }
 
-export default async ({ reply }: IBotData) => {
+export default async ({ reply, userJid }: IBotData) => {
+
+    if(getPermissionLevel(userJid) < 2) return reply("Apenas owners podem utilizar este comando!")
 
     await reply("🕵️‍♂️ Obtendo informações..."); 
 
