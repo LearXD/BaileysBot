@@ -1,67 +1,83 @@
-import path from 'path';
-
-import { downloadImage, getRandomName } from "../functions";
+import { downloadImage, formatText, getRandomName } from "../functions";
 import { IBotData } from "../interfaces/IBotData";
 
 import fs from "fs";
 import fetch from "node-fetch";
 
-import util from 'util';
+import { query } from '../anilistManager';
 
 export const desciption = {
     usage: `anime (marque ou envie uma imagem)`,
     desciption: `Descubra o anime e episódio através de uma imagem!`
-  }
+}
 
-export default async ({ socket, reply, isImage, webMessage, remoteJid }: IBotData) => {
+export default async ({ socket, reply, isImage, webMessage, remoteJid, args }: IBotData) => {
 
-    if (!isImage) {
-        return await reply("⚠ Por favor, envie uma imagem!");
+    if (!isImage && args.length < 1) {
+        return await reply("😰 Por favor, envie uma imagem ou escreva o nome do anime que deseja procurar!");
     }
 
-    const downloadPath = path.resolve(
-        __dirname,
-        "..",
-        "..",
-        "assets",
-        "temp"
-    );
+    let animeData: any;
+    let extraMessage = "";
 
-    const imagePath = await downloadImage(webMessage, getRandomName(), downloadPath);
-    await reply("🔎 Fazendo busca!")
-
-    const res = JSON.parse(await (await fetch("https://api.trace.moe/search", {
-        method: "POST",
-        body: fs.readFileSync(imagePath),
-        headers: { "Content-type": "image/jpeg" },
-    })).text());
-    console.log(util.inspect(res, {showHidden: false, depth: null, colors: true}))
-
-    fs.unlinkSync(imagePath)
-
-    if(res.error !== "") {
-        return await reply("✖ Um erro ocorreu ao procurar o anime!\nErro: " + res.error) 
-    }
-
-    const anime = res.result[0];
-
-    const text = `🔎 *ANIME ENCONTRADO*
-
+    try {
+        if (isImage) {
+            const imagePath = await downloadImage(webMessage, getRandomName());
+            await reply("😶🔎 Procurando Anime...")
+    
+            const res = JSON.parse(await (await fetch("https://api.trace.moe/search", {
+                method: "POST",
+                body: fs.readFileSync(imagePath),
+                headers: { "Content-type": "image/jpeg" },
+            })).text());
+    
+            fs.unlinkSync(imagePath)
+    
+            if (res.error !== "") {
+                return await reply("🥶 Um erro ocorreu ao procurar o anime!\nErro: " + res.error)
+            }
+    
+            extraMessage = `
     🔥 Frames analizados: ${res.frameCount}
-
-    Anime: ${anime.filename.split(".mp4")[0]}
-    Frames: ${anime.from} --> ${anime.to}
-    Similaridade: ${Math.round(anime.similarity * 100)}%
-
-    OBS: Resultados de menos que 80% possuem a chance de serem incorretos!
-
-    Seach by BaileysBot 😎
-    `
+    
+    Episódio da Imagem: ${res.result[0].episode}
+    Frames: ${res.result[0].from} => ${res.result[0].to}
+    Semelhança: ${Math.round(res.result[0].similarity * 100)}
+            `
+    
+            animeData = await query(res.result[0].anilist, 'Media', 'ANIME', 'id');
+    
+        } else {
+            await reply("😶🔎 Procurando Anime...")
+            //TODO: Search by Gender...
+            animeData = await query(args.join(" "), 'Media', 'ANIME', 'search');
+        }
+    } catch(error) {
+        console.log(error)
+        return await reply("😫 Não foi possivel encontrar o anime, verifique se você escreveu o nome corretamente, ou se a imagem enviada faz parte de alguma cena do anime!")
+    }
     
 
-    await socket.sendMessage(remoteJid, {
-        video: { url: anime.video },
-        caption: text,
-        gifPlayback: true
-    })
+    let message = `😎 *ANIME ENCONTRADO* 🔎
+  ${extraMessage}
+  *Título*: ${formatText(animeData.title.romaji)}
+  *Título Original*: ${formatText(animeData.title.native)}
+  
+  *Descrição*: ${formatText(animeData.description)}
+
+  *Lançamento*: ${animeData.startDate.day}/${animeData.startDate.month}/${animeData.startDate.year}
+  *Ultima Atualização*: ${animeData.endDate.day}/${animeData.endDate.month}/${animeData.endDate.year}
+  *Episódios*: ${animeData.episodes}
+  *Capítulos*: ${animeData.chapters ?? (animeData.volumes ?? "Sem Informações")}
+
+  *Generos*: ${animeData.genres.join(", ")}
+
+  *Pontuação*: ${animeData.averageScore}/100`;
+
+    await await socket.sendMessage(remoteJid,
+        {
+            image: { url: formatText(animeData.coverImage?.large.replace('medium', 'large') ?? animeData.coverImage?.medium) },
+            caption: message,
+        })
+
 }

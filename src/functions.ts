@@ -533,6 +533,10 @@ export const onlyNumbers = (text: string) => {
   return text.replace(/[^0-9]/g, "");
 };
 
+export const formatText = (text: string) => {
+  return (text.replace(/\//g, '/')).replace(/<[^>]*>?/gm, '')
+}
+
 
 export async function getBuffer(url: string) {
   const res = await fetch(url, {
