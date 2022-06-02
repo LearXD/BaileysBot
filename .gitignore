@@ -5,4 +5,5 @@ config.json
 settings/vision_auth_file.json
 settings/auth.json
 src/commands/crashar.ts
+.gitignore
 

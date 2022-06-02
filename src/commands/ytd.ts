@@ -4,8 +4,8 @@ import axios from "axios";
 import yts from "yt-search";
 import ytdl from "ytdl-core";
 
-import { IBotData } from "../interfaces/IBotData";
-import { getRandomName } from "../functions";
+import { IBotProperties } from '../interfaces';
+import { getRandomName } from "../botManager";
 
 export const desciption = {
     usage: `ytd (nome do video ou link)`,
@@ -13,7 +13,7 @@ export const desciption = {
   }
 
 
-export default async ({ reply, sendImage, sendVideo, args }: IBotData) => {
+export default async ({ reply, sendImage, sendVideo, args }: IBotProperties) => {
     await reply("Aguarde... Pesquisando... ⌛");
 
     const maxLength = 100;

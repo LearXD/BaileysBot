@@ -1,16 +1,15 @@
-import { general } from "../configurations/general";
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 
 import path from "path";
 
-import { getPermissionLevel, readJSON, writeJSON } from "../functions";
+import { getConfig, getPermissionLevel, readJSON, writeJSON } from "../botManager";
 
 export const desciption = {
   usage: `owners (add|remove)`,
   desciption: `Adicione e Remova owners.`
 }
 
-export default async ({ reply, args, userJid }: IBotData) => {
+export default async ({ reply, args, userJid }: IBotProperties) => {
 
   if (getPermissionLevel(userJid) < 2) {
     return await reply("⚠ Apenas um Super Usuário pode utilizar este comando!");
@@ -20,7 +19,7 @@ export default async ({ reply, args, userJid }: IBotData) => {
   let ownersData = readJSON(ownersPath);
 
   if(args.length <= 0) {
-    return await reply(`⚠ Use ${general.prefix}owner add|remove`);
+    return await reply(`⚠ Use ${getConfig().prefix}owner add|remove`);
   }
 
   if(args.length <= 1) {

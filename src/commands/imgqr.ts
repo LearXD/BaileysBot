@@ -1,8 +1,8 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 import qrcode from 'qrcode'
 
 import fs from 'fs';
-import { downloadImage, getRandomName } from "../functions";
+import { downloadImage, getRandomName } from "../botManager";
 
 import imageToBase64 from 'image-to-base64';
 
@@ -13,7 +13,7 @@ export const desciption = {
     desciption: `Receba informações da imagem`
 }
 
-export default async ({ reply, isImage, webMessage, sendImage }: IBotData) => {
+export default async ({ reply, isImage, webMessage, sendImage }: IBotProperties) => {
 
     if (!isImage) {
         return await reply(`⚠ Por favor, envie uma imagem!`);

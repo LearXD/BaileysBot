@@ -1,12 +1,12 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 import fs from 'fs';
-import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../functions";
+import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../botManager";
 import { query } from '../visionManager';
 
 import util from 'util';
 
 
-export default async ({ reply, isImage, webMessage}: IBotData) => {
+export default async ({ reply, isImage, webMessage}: IBotProperties) => {
    
     if (!isImage) {
         return await reply("⚠ Por favor, envie uma imagem!");

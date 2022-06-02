@@ -1,16 +1,16 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 import si from 'systeminformation';
 import axios from "axios";
 
 import FastSpeedtest from 'fast-speedtest-api';
-import { getPermissionLevel } from "../functions";
+import { getPermissionLevel } from "../botManager";
 
 export const desciption = {
     usage: `status`,
     desciption: `Veja as informações sobre o BOT e seu Loader...`
 }
 
-export default async ({ reply, userJid }: IBotData) => {
+export default async ({ reply, userJid }: IBotProperties) => {
 
     if(getPermissionLevel(userJid) < 2) return reply("Apenas owners podem utilizar este comando!")
 

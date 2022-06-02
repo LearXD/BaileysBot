@@ -1,12 +1,13 @@
-import { general } from "./configurations/general";
+import path from "path";
 import { connect } from "./connection";
 import {
   getBotData,
   getBuffer,
   getCommand,
+  getConfig,
   isCommand,
   onlyNumbers
-} from "./functions";
+} from "./botManager";
 
 export default async () => {
   const socket = await connect();
@@ -16,14 +17,15 @@ export default async () => {
     const { command, ...data } = getBotData(socket, webMessage);
 
 
-    if (data.isAudio) return;
+    if (data.isAudio) return; //TODO: AUDIO VERIFY
     if (!isCommand(command)) return;
 
     try {
 
-      const action = await getCommand(command.replace(general.prefix, ""));
+      await socket.sendReadReceipt(data.remoteJid, data.isGroup ? data.userJid : undefined, [ data.id ])
+      const action = await getCommand(command.replace(getConfig().prefix, ""));
       await action({ command, ...data });
-      await socket.sendReadReceipt(data.remoteJid, data.userJid, [ data.id ])
+      
 
     } catch (error) {
       console.log(error);
@@ -45,10 +47,7 @@ export default async () => {
   socket.ev.on("group-participants.update", async ({ id, action, participants }) => {
     const groupMetadata = await socket.groupMetadata(id);
 
-    
-
-    let url = "https://kanto.legiaodosherois.com.br/w760-h398-gnw-cfill-q95/wp-content/uploads/2022/03/legiao_1Chpjai7RW84.jpg.jpeg";
-
+    let url: string = path.join('../assets', 'images', 'profile.jpg');
     try {
       url = (await socket.profilePictureUrl(id, "image"));
     } catch (error) { }
@@ -61,7 +60,7 @@ export default async () => {
       👍 Seja Bem-Vindo(a) ao _${groupMetadata.subject}_
 
       Descrição: ${groupMetadata.desc ?? "Sem descrição..."}
-      Bate papo disponível: ${groupMetadata.restrict ? "Não" : "Sim"}
+      Bate papo disponível: ${groupMetadata.announce ? "Não" : "Sim"}
         
       Dono do grupo: wa.me/${onlyNumbers(groupMetadata.owner)}
 

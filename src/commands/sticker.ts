@@ -3,9 +3,9 @@ import fs from "fs";
 import path from "path";
 
 import ffmpeg from "fluent-ffmpeg";
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 
-import { downloadImage, downloadVideo, getRandomName } from "../functions";
+import { downloadImage, downloadVideo, getRandomName } from "../botManager";
 
 export const desciption = {
   usage: `sticker (marque ou envie uma imagem ou video)`,
@@ -18,7 +18,7 @@ export default async ({
   isVideo,
   webMessage,
   reply,
-  sendSticker }: IBotData) => {
+  sendSticker }: IBotProperties) => {
 
   if (!isImage && !isVideo) {
     return await reply(`⚠ Por favor, envie uma imagem ou um vídeo!`);

@@ -6,7 +6,7 @@
 import path from 'path';
 
 import vision from '@google-cloud/vision';
-import { readJSON } from './functions';
+import { readJSON } from './botManager';
 
 export const query = async (
     imagePath: string,

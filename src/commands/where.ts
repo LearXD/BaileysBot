@@ -1,9 +1,9 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 
 
 import fs from 'fs';
 
-import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../functions";
+import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../botManager";
 import { query } from '../visionManager';
 
 export const desciption = {
@@ -11,7 +11,7 @@ export const desciption = {
     desciption: `Receba a localização da imagem`
   }
 
-export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotData) => {
+export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotProperties) => {
    
    
     if (!isImage) {

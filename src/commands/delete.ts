@@ -1,7 +1,7 @@
-import { getPermissionLevel } from "../functions";
-import { IBotData } from "../interfaces/IBotData";
+import { getPermissionLevel } from "../botManager";
+import { IBotProperties } from '../interfaces';
 
-export default async ({webMessage, remoteJid, socket, reply, quotedMessage, args, userJid}: IBotData) => {
+export default async ({webMessage, remoteJid, socket, reply, quotedMessage, args, userJid}: IBotProperties) => {
 
     if (getPermissionLevel(userJid) < 2) return reply("Apenas owners podem utilizar este comando!")
 

@@ -1,8 +1,8 @@
 import path from 'path';
 import fs from 'fs';
 
-import { IBotData } from "../interfaces/IBotData";
-import { getRandomName } from "../functions";
+import { IBotProperties } from '../interfaces';
+import { getRandomName } from "../botManager";
 
 import * as tts from 'google-tts-api';
 
@@ -13,7 +13,7 @@ export const desciption = {
 
 
 
-export default async ({ socket, args, sendAudio, reply }: IBotData) => {
+export default async ({ socket, args, sendAudio, reply }: IBotProperties) => {
 
   if (args.length < 1) {
     return await reply("⚠ Defina o codigo da linguagem que deseja que seja falado!")

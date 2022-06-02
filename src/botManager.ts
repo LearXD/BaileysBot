@@ -2,8 +2,7 @@ import { proto, DownloadableMessage, downloadContentFromMessage, GroupParticipan
 import fs from "fs";
 import pm from 'path';
 import { writeFile } from "fs/promises";
-import { IBotData } from "./interfaces/IBotData";
-import { general } from "./configurations/general";
+import { IBotProperties } from './interfaces';;
 import fetch from "node-fetch";
 import { path } from "@ffmpeg-installer/ffmpeg";
 
@@ -150,7 +149,7 @@ export const getBotFunctions = (socket: any, remoteJid: string, webMessage?: pro
   }
 }
 
-export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBotData => {
+export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBotProperties => {
   const { remoteJid } = webMessage.key;
 
   const {
@@ -168,6 +167,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       id,
       messageText,
       quotedMessage,
+      isGroup,
       isImage,
       isVideo,
       isSticker,
@@ -196,6 +196,7 @@ export const getBotData = (socket: any, webMessage?: proto.IWebMessageInfo): IBo
       webMessage,
       command,
       args,
+      isGroup,
       isImage,
       isVideo,
       isSticker,
@@ -225,13 +226,14 @@ export const getCommand = (commandName: string) => {
   
   const command = fs
     .readdirSync(pathCommands)
-    .find((file) => file.split(".")[0] == commandName);
+    .find((file) => file.split(".")[0] == commandName.toLocaleLowerCase());
 
   if (!command) {
     throw new Error(
-      `⚠ Esse comando não existe! Digite ${general.prefix}ajuda [ Para ver a lista de commandos ]`
+      `⚠ Esse comando não existe! Digite ${getConfig().prefix}ajuda [ Para ver a lista de commandos ]`
     );
   }
+  
   return require(`./commands/${command}`).default;
 };
 
@@ -271,19 +273,13 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     const buttonTextMessage = message.message?.buttonsResponseMessage;
     const listTextMessage = message.message?.listResponseMessage;
 
-    const type1 = message.message?.conversation;
-
-    const type2 = extendedTextMessage?.text;
-
-    const type3 = message.message?.imageMessage?.caption;
-
-    const type4 = buttonTextMessage?.selectedButtonId;
-
-    const type5 = listTextMessage?.singleSelectReply?.selectedRowId;
-
-    const type6 = message?.message?.videoMessage?.caption;
-
-    messageText = type1 || type2 || type3 || type4 || type5 || type6 || "";
+    messageText = 
+      message.message?.conversation || 
+      extendedTextMessage?.text || 
+      message.message?.imageMessage?.caption || 
+      buttonTextMessage?.selectedButtonId || 
+      listTextMessage?.singleSelectReply?.selectedRowId || 
+      message?.message?.videoMessage?.caption || "";
 
     isReply =
       !!extendedTextMessage && !!extendedTextMessage.contextInfo?.quotedMessage;
@@ -302,6 +298,8 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
   }
 
   const tempMessage = message?.message;
+
+  const isGroup = jid.endsWith("@g.us");
 
   const isImage =
     !!tempMessage?.imageMessage ||
@@ -343,6 +341,7 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     remoteJid,
     quotedMessage,
     messageText,
+    isGroup,
     isReply,
     replyJid,
     replyText,
@@ -378,7 +377,7 @@ export const getPermissionLevel = (jid: string) => {
 }
 
 export const isCommand = (message: string) =>
-  message.length > 1 && message.startsWith(general.prefix);
+  message.length > 1 && message.startsWith(getConfig().prefix);
 
 export const getRandomName = (extension?: string) => {
   const fileName = Math.floor(Math.random() * 10000);
@@ -428,6 +427,10 @@ export const downloadImage = async (
 
   return filePath;
 };
+
+export const getConfig = () => {
+    return readJSON(pm.join(__dirname, '..', 'config.json'));
+}
 
 export const downloadVideo = async (
   webMessage: proto.IWebMessageInfo,
@@ -511,11 +514,11 @@ export const downloadSticker = async (
   return filePath;
 };
 
-export const isSuperAdmin = async (botData: IBotData) => {
+export const isSuperAdmin = async (botData: IBotProperties) => {
   return await validate("superadmin", botData);
 };
 
-export const isAdmin = async (botData: IBotData) => {
+export const isAdmin = async (botData: IBotProperties) => {
   return (
     (await validate("admin", botData)) ||
     (await validate("superadmin", botData))
@@ -524,7 +527,7 @@ export const isAdmin = async (botData: IBotData) => {
 
 export const validate = async (
   type: string,
-  { remoteJid, socket, userJid }: IBotData
+  { remoteJid, socket, userJid }: IBotProperties
 ) => {
   if (!isJidGroup(remoteJid)) return true;
 

@@ -1,6 +1,6 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 import fs from 'fs';
-import { downloadImage, getRandomName } from "../functions";
+import { downloadImage, getRandomName } from "../botManager";
 import { query } from '../visionManager';
 
 export const desciption = {
@@ -9,7 +9,7 @@ export const desciption = {
   }
 
 
-export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotData) => {
+export default async ({ reply, isImage, webMessage, socket, remoteJid}: IBotProperties) => {
    
     if (!isImage) {
         return await reply("⚠ Por favor, envie uma imagem!");

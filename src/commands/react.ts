@@ -1,4 +1,4 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 
 export const desciption = {
   usage: `react (emoji)`,
@@ -6,7 +6,7 @@ export const desciption = {
 }
 
 
-export default async (botData: IBotData) => {
+export default async (botData: IBotProperties) => {
   const { args, reply, remoteJid, socket, userJid, webMessage } = botData;
 
   if(!args || args.length < 1 || (args[0].length < 1 || args[0].length > 3)) {

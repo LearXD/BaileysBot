@@ -4,15 +4,15 @@ import axios from "axios";
 import yts from "yt-search";
 import ytdl from "ytdl-core";
 
-import { IBotData } from "../interfaces/IBotData";
-import { getRandomName } from "../functions";
+import { IBotProperties } from '../interfaces';
+import { getRandomName } from "../botManager";
 
 export const desciption = {
     usage: `musica (nome do video ou link)`,
     desciption: `Receba o download de uma musica no youtube!`
   }
 
-export default async ({ reply, sendImage, sendAudio, args }: IBotData) => {
+export default async ({ reply, sendImage, sendAudio, args }: IBotProperties) => {
     await reply("Aguarde... Pesquisando... ⌛");
 
     const maxLength = 100;

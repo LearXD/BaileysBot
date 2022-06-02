@@ -1,13 +1,13 @@
 import { isJidGroup } from "@adiwajshing/baileys";
-import { IBotData } from "../interfaces/IBotData";
-import { isAdmin } from '../functions';
+import { IBotProperties } from '../interfaces';
+import { isAdmin } from '../botManager';
 
 export const desciption = {
     usage: `ban (pessoas)`,
     desciption: `Remova pessoas do grupo.`
   }
 
-export default async (botData: IBotData) => {
+export default async (botData: IBotProperties) => {
 
     const {socket, reply, userJid, remoteJid, mentionedJid, webMessage } = botData;
 

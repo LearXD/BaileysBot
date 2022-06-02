@@ -1,13 +1,13 @@
-import { IBotData } from "../interfaces/IBotData";
+import { IBotProperties } from '../interfaces';
 
-import { isAdmin, onlyNumbers } from "../functions";
+import { isAdmin, onlyNumbers } from "../botManager";
 
 export const desciption = {
   usage: `add (numero)`,
   desciption: `Adicione pessoas no grupo.`
 }
 
-export default async (botData: IBotData) => {
+export default async (botData: IBotProperties) => {
   const { reply, sendText, remoteJid, socket, args } = botData;
 
   if (!(await isAdmin(botData))) {

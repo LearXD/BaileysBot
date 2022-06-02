@@ -1,5 +1,5 @@
-import { downloadImage, formatText, getRandomName } from "../functions";
-import { IBotData } from "../interfaces/IBotData";
+import { downloadImage, formatText, getRandomName } from "../botManager";
+import { IBotProperties } from '../interfaces';
 
 import fs from "fs";
 import fetch from "node-fetch";
@@ -11,7 +11,7 @@ export const desciption = {
     desciption: `Descubra o anime e episódio através de uma imagem!`
 }
 
-export default async ({ socket, reply, isImage, webMessage, remoteJid, args }: IBotData) => {
+export default async ({ socket, reply, isImage, webMessage, remoteJid, args }: IBotProperties) => {
 
     if (!isImage && args.length < 1) {
         return await reply("😰 Por favor, envie uma imagem ou escreva o nome do anime que deseja procurar!");
@@ -32,20 +32,21 @@ export default async ({ socket, reply, isImage, webMessage, remoteJid, args }: I
             })).text());
     
             fs.unlinkSync(imagePath)
+            const animes = (res?.result.length < 1 ? [] : res.result.filter((a: any) => ((a.similarity * 100) > 83)))
     
-            if (res.error !== "") {
+            if (res.error !== "" || animes.length < 1) {
                 return await reply("🥶 Um erro ocorreu ao procurar o anime!\nErro: " + res.error)
             }
     
             extraMessage = `
     🔥 Frames analizados: ${res.frameCount}
     
-    Episódio da Imagem: ${res.result[0].episode}
-    Frames: ${res.result[0].from} => ${res.result[0].to}
-    Semelhança: ${Math.round(res.result[0].similarity * 100)}
+    Episódio da Imagem: ${animes[0].episode}
+    Frames: ${animes[0].from} => ${animes[0].to}
+    Semelhança: ${Math.round(animes[0].similarity * 100)}
             `
     
-            animeData = await query(res.result[0].anilist, 'Media', 'ANIME', 'id');
+            animeData = await query(animes[0].anilist, 'Media', 'ANIME', 'id');
     
         } else {
             await reply("😶🔎 Procurando Anime...")

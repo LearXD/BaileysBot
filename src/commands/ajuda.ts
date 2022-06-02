@@ -1,16 +1,15 @@
 import path from 'path';
 import fs from 'fs';
 
-import { general } from '../configurations/general';
-import { IBotData } from "../interfaces/IBotData";
-import { getBuffer } from '../functions';
+import { IBotProperties } from '../interfaces';
+import { getConfig } from '../botManager';
 
 export const desciption = {
   usage: `ajuda`,
   desciption: `Veja a lista de comandos disponíveis!`
 }
 
-export default async ({socket, reply, remoteJid}: IBotData) => {
+export default async ({socket, reply, remoteJid}: IBotProperties) => {
     const commandsPath = path.join(__dirname);
 
     const commands = fs
@@ -26,7 +25,7 @@ export default async ({socket, reply, remoteJid}: IBotData) => {
 
     let text = `📝 *Lista de comandos* (${commands.length}) 📝\n`; 
     commands.map((command, pos) => {
-        text += `\n➤ ${general.prefix}${command} \n`;
+        text += `\n➤ ${getConfig().prefix}${command} \n`;
     })
 
     await socket.sendMessage(remoteJid, { 
