@@ -15,7 +15,6 @@ export default async () => {
     const [webMessage] = message.messages;
     const { command, ...data } = getBotData(socket, webMessage);
 
-    console.log(webMessage)
 
     if (data.isAudio) return;
     if (!isCommand(command)) return;

@@ -1,7 +1,10 @@
 <div align="center">
-<img src="https://kanto.legiaodosherois.com.br/w760-h398-gnw-cfill-q95/wp-content/uploads/2022/03/legiao_1Chpjai7RW84.jpg.jpeg" alt="BaileysBot" width="500"/>
-
+<img src="assets/images/profile.jpg" alt="BaileysBot" width="500"/>
+<br>
+<br>
 <a href="#"><img title="BAILEYS BOT" src="https://img.shields.io/badge/BAILEYS BOT MULTI DEVICE-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
+<br>
+<br>
 
 <a href="https://github.com/LearXD"><img title="Author 1" src="https://img.shields.io/badge/Author-LearXD-black.svg?style=for-the-badge&logo=github"></a>
 <a href="https://github.com/SmallkingDev"><img title="Author 2" src="https://img.shields.io/badge/Author-SmallKingDev-black.svg?style=for-the-badge&logo=github"></a>
