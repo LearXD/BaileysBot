@@ -5,7 +5,6 @@
 <a href="#"><img title="BAILEYS BOT" src="https://img.shields.io/badge/BAILEYS BOT MULTI DEVICE-green?colorA=%23ff0000&colorB=%23017e40&style=for-the-badge"></a>
 <br>
 <br>
-
 <a href="https://github.com/LearXD"><img title="Author 1" src="https://img.shields.io/badge/Author-LearXD-black.svg?style=for-the-badge&logo=github"></a>
 <a href="https://github.com/SmallkingDev"><img title="Author 2" src="https://img.shields.io/badge/Author-SmallKingDev-black.svg?style=for-the-badge&logo=github"></a>
 
@@ -32,6 +31,7 @@
 * [Git](https://git-scm.com/downloads)
 
 
+
 # Instalação 💾
 ## Para Windows
 ```bash
@@ -42,6 +42,7 @@ npm run build
 node .
 ```
 
+
 ## For VPS
 ```bash
 apt install git
@@ -51,6 +52,7 @@ bash installers/install.sh
 npm run build
 node .
 ```
+
 
 ## Para Termux
 ```bash
