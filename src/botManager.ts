@@ -237,7 +237,7 @@ export const getCommand = (commandName: string) => {
   return require(`./commands/${command}`).default;
 };
 
-export const readJSON = (pathFile: string) => {
+export const readJSON = (pathFile: string): any => {
   // @ts-ignore
   return JSON.parse(fs.readFileSync(pathFile));
 };
