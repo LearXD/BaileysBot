@@ -14,7 +14,7 @@ export const connect = async () => {
 		{
 			printQRInTerminal: true,
 			auth: state,
-			logger: Logger({ level: 'silent' })
+			//logger: Logger({ level: 'silent' })
 		});
 	
 
