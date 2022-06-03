@@ -1,12 +1,24 @@
-import { getPermissionLevel } from "./botManager";
+import { getPermissionLevel, readJSON, writeJSON } from "./botManager";
+import path from 'path';
 
-const userData = [];
+const usersPath = path.join(__dirname, '..', 'assets', 'temp', 'users.json')
 
-export const canUseCommand = (jid: string) => 
-    getPermissionLevel(jid) > 0 || !userData.includes(jid);
+const getUserData = () => {
+    return readJSON(usersPath)
+}
+
+export const canUseCommand = (jid: string) =>
+    getPermissionLevel(jid) > 0 || !((getUserData()).includes(jid));
 
 export const useCommand = (jid: string, command?: string) => {
-    if(getPermissionLevel(jid) <= 0) {
+    if (getPermissionLevel(jid) <= 0) {
+        const userData = getUserData();
         userData.push(jid);
+        writeJSON(usersPath, userData);
+        setInterval(() => {
+            const userData = getUserData();
+            userData.splice(userData.indexOf(jid))
+            writeJSON(usersPath, userData);
+        }, 5000)
     }
 }

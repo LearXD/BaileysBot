@@ -2,12 +2,13 @@ import path from "path";
 import { connect } from "./connection";
 import {
   getBotData,
-  getBuffer,
   getCommand,
   getConfig,
   isCommand,
   onlyNumbers
 } from "./botManager";
+
+import { useCommand, canUseCommand } from './commandManager';
 
 export default async () => {
   const socket = await connect();
@@ -20,13 +21,16 @@ export default async () => {
     if (data.isAudio) return; //TODO: AUDIO VERIFY
     if (!isCommand(command)) return;
 
+    if(!canUseCommand(data.remoteJid))
+      return await data.reply('🕙 Aguarde 5s para executar um comando novamente!')
+
     try {
 
       await socket.sendReadReceipt(data.remoteJid, data.isGroup ? data.userJid : undefined, [ data.id ])
       const action = await getCommand(command.replace(getConfig().prefix, ""));
+      useCommand(data.remoteJid)
       await action({ command, ...data });
-      
-
+    
     } catch (error) {
       console.log(error);
       if (error) {
@@ -52,7 +56,6 @@ export default async () => {
       url = (await socket.profilePictureUrl(id, "image"));
     } catch (error) { }
 
-    const image = await getBuffer(url);
 
     switch (action) {
       case "add":
