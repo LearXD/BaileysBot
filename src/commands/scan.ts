@@ -4,7 +4,7 @@ import fs from 'fs';
 import { protos } from '@google-cloud/vision';
 
 import { downloadImage, getRandomName } from "../botManager";
-import { query } from '../visionManager';
+import { query } from '../libs/visionManager';
 
 export const desciption = {
     usage: `scan (imagem)`,

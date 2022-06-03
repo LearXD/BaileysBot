@@ -1,7 +1,7 @@
 import { IBotProperties } from '../interfaces';
 import fs from 'fs';
 import { downloadImage, getRandomName } from "../botManager";
-import { query } from '../visionManager';
+import { query } from '../libs/visionManager';
 
 export const desciption = {
     usage: `search (marque ou envie uma imagem)`,

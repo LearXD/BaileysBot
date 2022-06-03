@@ -4,7 +4,7 @@ import { IBotProperties } from '../interfaces';
 import fs from 'fs';
 
 import { downloadImage, getRandomName, isAdmin, onlyNumbers } from "../botManager";
-import { query } from '../visionManager';
+import { query } from '../libs/visionManager';
 
 export const desciption = {
     usage: `where (imagem)`,

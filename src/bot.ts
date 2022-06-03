@@ -34,18 +34,18 @@ export default async () => {
     }
     if (!isCommand(command)) return;
 
-    if(!canUseCommand(data.remoteJid))
+    if (!canUseCommand(data.remoteJid))
       return await data.reply('🕙 Aguarde 5s para executar um comando novamente!')
 
     try {
 
-      await socket.sendReadReceipt(data.remoteJid, data.isGroup ? data.userJid : undefined, [ data.id ])
+      await socket.sendReadReceipt(data.remoteJid, data.isGroup ? data.userJid : undefined, [data.id])
       await socket.sendPresenceUpdate('composing', data.remoteJid)
       const action = await getCommand(command.replace(getConfig().prefix, ""));
       useCommand(data.remoteJid)
       await action({ command, ...data });
       await socket.sendPresenceUpdate('available', data.remoteJid)
-    
+
     } catch (error) {
       console.log(error);
       if (error) {
@@ -68,6 +68,7 @@ export default async () => {
   socket.ev.on("group-participants.update", async ({ id, action, participants }) => {
     const groupMetadata = await socket.groupMetadata(id);
 
+
     let url: string = path.join('../assets', 'images', 'profile.jpg');
     try {
       url = (await socket.profilePictureUrl(id, "image"));
@@ -76,7 +77,8 @@ export default async () => {
 
     switch (action) {
       case "add":
-        await socket.sendMessage(participants[0], { image: { url: url }, caption: `
+        await socket.sendMessage(participants[0], {
+          image: { url: url }, caption: `
       👍 Seja Bem-Vindo(a) ao _${groupMetadata.subject}_
 
       Descrição: ${groupMetadata.desc ?? "Sem descrição..."}
