@@ -6,15 +6,13 @@
 import path from 'path';
 
 import vision from '@google-cloud/vision';
-import { readJSON } from './botManager';
+import { readJSON } from '../botManager';
 
 export const query = async (
     imagePath: string,
     queryType: "TEXT_DETECT" | "DOCUMENT_TEXT" | "LANDMARK" | "IMAGE_PROPETIES" | "WEB_DETECTION" | "OBJECT_DETECTION" | "ADULT_DETECTION" | "FACE_DETECTION"
 ) => { 
-
-    const authPath = path.join(__dirname, '..', 'settings', 'vision_auth_file.json');
-    const CREDENTIALS = readJSON(authPath);
+    const CREDENTIALS = readJSON(path.join(__dirname, '..', 'settings', 'cloud_google_auth_file.json'));
 
     const client = new vision.ImageAnnotatorClient({
         credentials: {

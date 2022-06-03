@@ -223,7 +223,7 @@ export const getCommand = (commandName: string) => {
   const pathCommands = pm.join(__dirname, "commands");
 
   if (!commandName) return;
-  
+
   const command = fs
     .readdirSync(pathCommands)
     .find((file) => file.split(".")[0] == commandName.toLocaleLowerCase());
@@ -233,7 +233,7 @@ export const getCommand = (commandName: string) => {
       `⚠ Esse comando não existe! Digite ${getConfig().prefix}ajuda [ Para ver a lista de commandos ]`
     );
   }
-  
+
   return require(`./commands/${command}`).default;
 };
 
@@ -273,12 +273,12 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
     const buttonTextMessage = message.message?.buttonsResponseMessage;
     const listTextMessage = message.message?.listResponseMessage;
 
-    messageText = 
-      message.message?.conversation || 
-      extendedTextMessage?.text || 
-      message.message?.imageMessage?.caption || 
-      buttonTextMessage?.selectedButtonId || 
-      listTextMessage?.singleSelectReply?.selectedRowId || 
+    messageText =
+      message.message?.conversation ||
+      extendedTextMessage?.text ||
+      message.message?.imageMessage?.caption ||
+      buttonTextMessage?.selectedButtonId ||
+      listTextMessage?.singleSelectReply?.selectedRowId ||
       message?.message?.videoMessage?.caption || "";
 
     isReply =
@@ -312,9 +312,9 @@ export const extractDataFromWebMessage = (message: proto.IWebMessageInfo) => {
       ?.videoMessage;
 
   const isAudio =
-    !!tempMessage?.audioMessage ||
+    !!tempMessage?.audioMessage /*||
     !!tempMessage?.extendedTextMessage?.contextInfo?.quotedMessage
-      ?.audioMessage;
+      ?.audioMessage;*/
 
   const isSticker =
     !!tempMessage?.stickerMessage ||
@@ -387,6 +387,31 @@ export const getRandomName = (extension?: string) => {
   return `${fileName}.${extension}`;
 };
 
+export const downloadAudio = async (
+  webMessage: proto.IWebMessageInfo,
+  fileName: string
+) => {
+  const content = (webMessage?.message?.audioMessage ||
+    webMessage?.message?.extendedTextMessage?.contextInfo?.quotedMessage
+      ?.audioMessage) as DownloadableMessage;
+
+  if (!content) return null;
+
+  const stream = await downloadContentFromMessage(content, "audio");
+
+  let buffer = Buffer.from([]);
+  
+  for await (const chunk of stream) {
+    buffer = Buffer.concat([buffer, chunk]);
+  }
+
+  const filePath = pm.resolve(__dirname, "..", "assets", "temp", "audios", `${fileName}.ogg`);
+
+  await writeFile(filePath, buffer);
+
+  return filePath;
+}
+
 export const downloadImage = async (
   webMessage: proto.IWebMessageInfo,
   fileName: string,
@@ -429,7 +454,7 @@ export const downloadImage = async (
 };
 
 export const getConfig = () => {
-    return readJSON(pm.join(__dirname, '..', 'config.json'));
+  return readJSON(pm.join(__dirname, '..', 'config.json'));
 }
 
 export const downloadVideo = async (

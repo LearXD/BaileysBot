@@ -1,14 +1,19 @@
 import path from "path";
 import { connect } from "./connection";
 import {
+  downloadAudio,
   getBotData,
   getCommand,
   getConfig,
+  getRandomName,
   isCommand,
   onlyNumbers
 } from "./botManager";
 
+import fs from 'fs'
+
 import { useCommand, canUseCommand } from './commandManager';
+import { toText } from "./libs/speechManager";
 
 export default async () => {
   const socket = await connect();
@@ -18,7 +23,15 @@ export default async () => {
     const { command, ...data } = getBotData(socket, webMessage);
 
 
-    if (data.isAudio) return; //TODO: AUDIO VERIFY
+    if (data.isAudio) {
+      //const audioPath = await downloadAudio(webMessage, getRandomName());
+      //await toText(audioPath, async (result: string) => {
+      //  fs.unlinkSync(audioPath);
+      //  data.reply(result)
+      //});
+      //console.log(webMessage)
+      return;
+    }
     if (!isCommand(command)) return;
 
     if(!canUseCommand(data.remoteJid))
@@ -27,9 +40,11 @@ export default async () => {
     try {
 
       await socket.sendReadReceipt(data.remoteJid, data.isGroup ? data.userJid : undefined, [ data.id ])
+      await socket.sendPresenceUpdate('composing', data.remoteJid)
       const action = await getCommand(command.replace(getConfig().prefix, ""));
       useCommand(data.remoteJid)
       await action({ command, ...data });
+      await socket.sendPresenceUpdate('available', data.remoteJid)
     
     } catch (error) {
       console.log(error);
@@ -40,12 +55,14 @@ export default async () => {
   });
 
   socket.ev.on("call", async (data) => {
+    console.log(data)
+    /*
     data.forEach(async ({ from }) => {
       await socket.sendMessage(from, {
         text: "📵 Seu numero foi blockeado por tentar ligar para mim!"
       })
       await socket.updateBlockStatus(from, "block");
-    });
+    });*/
   })
 
   socket.ev.on("group-participants.update", async ({ id, action, participants }) => {
