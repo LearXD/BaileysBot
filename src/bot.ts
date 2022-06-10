@@ -24,11 +24,14 @@ export default async () => {
 
 
     if (data.isAudio) {
+      //RECONHECIMENTO ATRAVEZ DE AUDIO... (DESATIVADO POR NAO ESTAR COMPLETAMENTE IMPLEMENTADO!)
+      
       //const audioPath = await downloadAudio(webMessage, getRandomName());
       //await toText(audioPath, async (result: string) => {
       //  fs.unlinkSync(audioPath);
       //  data.reply(result)
       //});
+      
       //console.log(webMessage)
       return;
     }
@@ -55,14 +58,12 @@ export default async () => {
   });
 
   socket.ev.on("call", async (data) => {
-    console.log(data)
-    /*
     data.forEach(async ({ from }) => {
       await socket.sendMessage(from, {
         text: "📵 Seu numero foi blockeado por tentar ligar para mim!"
       })
       await socket.updateBlockStatus(from, "block");
-    });*/
+    });
   })
 
   socket.ev.on("group-participants.update", async ({ id, action, participants }) => {
@@ -87,9 +88,6 @@ export default async () => {
       Dono do grupo: wa.me/${onlyNumbers(groupMetadata.owner)}
 
         `});
-        break;
-      case "remove":
-        //await sendImage(buffer.result, "👍 Tchau Tchau!");
         break;
     }
   });
