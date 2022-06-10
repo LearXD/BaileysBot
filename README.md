@@ -50,7 +50,7 @@ apt-get upgrade -y
 apt-get install git
 git clone https://github.com/LearXD/BaileysBot
 cd BaileysBot
-bash installers/install.sh
+sudo bash installers/install.sh
 npm run build
 node .
 ```
